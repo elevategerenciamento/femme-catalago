@@ -1,0 +1,790 @@
+<!DOCTYPE html>
+<html class="dark" lang="pt-BR">
+<head>
+  <meta charset="utf-8"/>
+  <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+  <title>Produtos | Femme Lingerie Premium</title>
+  <meta name="description" content="Explore a coleção completa da Femme Lingerie. Peças de alta costura com rendas exclusivas e seda. Encomende diretamente pelo WhatsApp.">
+  <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,500;0,600;0,700;1,400&family=Montserrat:wght@300;400;500;600&display=swap" rel="stylesheet"/>
+  <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200&display=swap" rel="stylesheet"/>
+  
+  <script id="tailwind-config">
+    tailwind.config = {
+      darkMode: "class",
+      theme: {
+        extend: {
+          "colors": {
+            "secondary": "#f7b6bb",
+            "on-background": "#e3e2e2",
+            "outline": "#988e90",
+            "tertiary-fixed": "#e2e2e2",
+            "surface-tint": "#c6c6c6",
+            "secondary-fixed-dim": "#f7b6bb",
+            "surface-container-low": "#1a1c1c",
+            "on-secondary-fixed-variant": "#68393e",
+            "tertiary": "#c6c6c7",
+            "on-primary-container": "#757575",
+            "background": "#121414",
+            "secondary-fixed": "#ffdadc",
+            "on-tertiary-container": "#747576",
+            "on-secondary-container": "#e4a5aa",
+            "tertiary-container": "#000000",
+            "inverse-primary": "#5e5e5e",
+            "surface-container": "#1e2020",
+            "on-primary": "#303030",
+            "secondary-container": "#68393e",
+            "primary-fixed": "#e2e2e2",
+            "on-tertiary": "#2f3131",
+            "surface-container-highest": "#333535",
+            "surface-dim": "#121414",
+            "primary-container": "#000000",
+            "primary": "#c6c6c6",
+            "surface-container-high": "#292a2a",
+            "on-secondary": "#4d2429",
+            "on-error-container": "#ffdad6",
+            "tertiary-fixed-dim": "#c6c6c7",
+            "on-secondary-fixed": "#340f15",
+            "inverse-surface": "#e3e2e2",
+            "on-tertiary-fixed-variant": "#454747",
+            "on-primary-fixed-variant": "#474747",
+            "on-surface": "#e3e2e2",
+            "outline-variant": "#4c4546",
+            "surface-container-lowest": "#0d0e0f",
+            "on-surface-variant": "#cfc4c5",
+            "on-primary-fixed": "#1b1b1b",
+            "surface-variant": "#333535",
+            "surface-bright": "#38393a",
+            "error": "#ffb4ab",
+            "error-container": "#93000a",
+            "primary-fixed-dim": "#c6c6c6",
+            "inverse-on-surface": "#2f3131",
+            "on-error": "#690005",
+            "surface": "#121414",
+            "on-tertiary-fixed": "#1a1c1c"
+          },
+          "borderRadius": {
+            "DEFAULT": "0.25rem",
+            "lg": "0.5rem",
+            "xl": "0.75rem",
+            "full": "9999px"
+          },
+          "spacing": {
+            "stack-lg": "32px",
+            "margin-edge": "5vw",
+            "stack-md": "16px",
+            "section-gap": "120px",
+            "gutter": "28px",
+            "stack-sm": "8px"
+          },
+          "fontFamily": {
+            "headline-lg-mobile": ["Playfair Display"],
+            "label-sm": ["Montserrat"],
+            "body-lg": ["Montserrat"],
+            "body-md": ["Montserrat"],
+            "headline-lg": ["Playfair Display"],
+            "subheading": ["Montserrat"],
+            "display-lg": ["Playfair Display"]
+          },
+          "fontSize": {
+            "headline-lg-mobile": ["32px", {"lineHeight": "1.2", "letterSpacing": "0.03em", "fontWeight": "400"}],
+            "label-sm": ["12px", {"lineHeight": "1.2", "letterSpacing": "0.1em", "fontWeight": "400"}],
+            "body-lg": ["18px", {"lineHeight": "1.6", "letterSpacing": "0.01em", "fontWeight": "300"}],
+            "body-md": ["16px", {"lineHeight": "1.6", "letterSpacing": "0.01em", "fontWeight": "300"}],
+            "headline-lg": ["48px", {"lineHeight": "1.2", "letterSpacing": "0.03em", "fontWeight": "400"}],
+            "subheading": ["14px", {"lineHeight": "1.4", "letterSpacing": "0.2em", "fontWeight": "500"}],
+            "display-lg": ["80px", {"lineHeight": "1.1", "letterSpacing": "0.05em", "fontWeight": "400"}]
+          }
+        },
+      },
+    }
+  </script>
+
+  <style>
+    .material-symbols-outlined {
+      font-variation-settings: 'FILL' 0, 'wght' 300, 'GRAD' 0, 'opsz' 24;
+    }
+    ::-webkit-scrollbar { width: 6px; }
+    ::-webkit-scrollbar-track { background: #121414; }
+    ::-webkit-scrollbar-thumb { background: #4c4546; }
+    ::-webkit-scrollbar-thumb:hover { background: #988e90; }
+    .image-zoom:hover .zoom-target { transform: scale(1.05); }
+
+    /* Cart Drawer */
+    #cart-drawer {
+      position: fixed; top: 0; right: 0; width: 420px; max-width: 100vw;
+      height: 100vh; background: #0d0e0f; z-index: 200;
+      transform: translateX(100%); transition: transform 0.4s cubic-bezier(0.25,1,0.5,1);
+      display: flex; flex-direction: column; border-left: 1px solid #4c4546;
+    }
+    #cart-drawer.open { transform: translateX(0); }
+    #cart-scrim {
+      position: fixed; inset: 0; background: rgba(13,14,15,0.65);
+      z-index: 190; opacity: 0; pointer-events: none;
+      transition: opacity 0.4s ease;
+    }
+    #cart-scrim.active { opacity: 1; pointer-events: auto; }
+
+    /* Search Overlay */
+    #search-overlay {
+      position: fixed; inset: 0; background: rgba(18,20,20,0.98);
+      z-index: 150; display: flex; flex-direction: column; align-items: center;
+      padding: 100px 5vw 40px; opacity: 0; pointer-events: none;
+      transition: opacity 0.4s ease;
+    }
+    #search-overlay.active { opacity: 1; pointer-events: auto; }
+
+    /* Quick View Modal */
+    #qv-overlay {
+      position: fixed; inset: 0; background: rgba(13,14,15,0.92);
+      z-index: 250; display: flex; align-items: center; justify-content: center;
+      padding: 24px; opacity: 0; pointer-events: none;
+      transition: opacity 0.4s ease;
+    }
+    #qv-overlay.active { opacity: 1; pointer-events: auto; }
+    #qv-modal {
+      background: #0d0e0f; border: 1px solid #4c4546;
+      width: 100%; max-width: 860px;
+      display: grid; grid-template-columns: 1.2fr 1fr;
+      position: relative; transform: translateY(20px);
+      transition: transform 0.4s ease;
+    }
+    #qv-overlay.active #qv-modal { transform: translateY(0); }
+    @media(max-width:640px){
+      #qv-modal { grid-template-columns: 1fr; max-height: 90vh; overflow-y: auto; }
+    }
+
+    /* Size Buttons */
+    .size-btn { width:38px; height:38px; border:1px solid #4c4546; font-size:12px; font-weight:500; transition: all 0.3s; }
+    .size-btn:hover { border-color: #e3e2e2; }
+    .size-btn.selected { background: #e3e2e2; color: #0d0e0f; border-color: #e3e2e2; }
+
+    /* Mobile Nav */
+    #mobile-nav {
+      position: fixed; inset: 0; background: rgba(18,20,20,0.99);
+      z-index: 95; display: flex; flex-direction: column;
+      align-items: center; justify-content: center; gap: 32px;
+      opacity: 0; pointer-events: none; transition: opacity 0.4s ease;
+    }
+    #mobile-nav.active { opacity: 1; pointer-events: auto; }
+
+    /* Cart Item */
+    .cart-item { display:flex; gap:16px; padding-bottom:16px; border-bottom:1px solid rgba(76,69,70,0.3); position:relative; }
+    .cart-item img { width:80px; height:107px; object-fit:cover; background:#1a1c1c; flex-shrink:0; }
+    .qty-ctrl button { width:28px; height:28px; border:1px solid #4c4546; font-size:14px; color:#cfc4c5; transition: all 0.2s; }
+    .qty-ctrl button:hover { border-color:#e3e2e2; color:#e3e2e2; }
+
+    /* Custom styles for active categories */
+    .filter-btn {
+      position: relative;
+      transition: color 0.3s ease;
+    }
+    .filter-btn::after {
+      content: '';
+      position: absolute;
+      bottom: -4px;
+      left: 0;
+      width: 100%;
+      height: 1px;
+      background-color: #f7b6bb;
+      transform: scaleX(0);
+      transform-origin: center;
+      transition: transform 0.3s ease;
+    }
+    .filter-btn.active {
+      color: #f7b6bb;
+    }
+    .filter-btn.active::after {
+      transform: scaleX(1);
+    }
+  </style>
+</head>
+<body class="bg-background text-on-background font-body-md text-body-md antialiased selection:bg-secondary selection:text-background overflow-x-hidden">
+
+<!-- ══════════════════ HEADER ══════════════════ -->
+<header id="site-header" class="bg-background/0 backdrop-blur-md fixed top-0 left-0 w-full z-50 border-b border-transparent flex justify-between items-center px-margin-edge py-stack-md transition-all duration-500">
+  <!-- Nav Esquerda (desktop) -->
+  <nav class="hidden md:flex gap-gutter items-center">
+    <a class="font-subheading text-subheading uppercase tracking-widest text-on-background hover:text-secondary transition-colors duration-300" href="index.html">Início</a>
+    <a class="font-subheading text-subheading uppercase tracking-widest text-secondary transition-colors duration-300" href="produtos.html">Produtos</a>
+    <a class="font-subheading text-subheading uppercase tracking-widest text-on-background hover:text-secondary transition-colors duration-300" href="index.html#collections">Coleções</a>
+    <a class="font-subheading text-subheading uppercase tracking-widest text-on-background hover:text-secondary transition-colors duration-300" href="index.html#story">Sobre a Femme</a>
+  </nav>
+  <!-- Menu hambúrguer (mobile) -->
+  <button id="menu-btn" class="md:hidden text-on-background hover:opacity-80 transition-opacity">
+    <span class="material-symbols-outlined">menu</span>
+  </button>
+  <!-- Logo Centralizada -->
+  <a class="font-display-lg text-display-lg text-on-background uppercase absolute left-1/2 -translate-x-1/2 md:static md:translate-x-0 tracking-widest transition-all duration-500" href="index.html">FEMME</a>
+  <!-- Ações Direita -->
+  <div class="flex gap-stack-md items-center">
+    <button id="search-btn" class="text-on-background hover:opacity-80 transition-opacity">
+      <span class="material-symbols-outlined">search</span>
+    </button>
+    <button class="hidden md:block text-on-background hover:opacity-80 transition-opacity">
+      <span class="material-symbols-outlined">person</span>
+    </button>
+    <button id="cart-btn" class="text-on-background hover:opacity-80 transition-opacity relative">
+      <span class="material-symbols-outlined">shopping_bag</span>
+      <span id="cart-badge" class="hidden absolute -top-1.5 -right-1.5 bg-secondary text-background text-[10px] font-bold w-4 h-4 rounded-full flex items-center justify-center leading-none">0</span>
+    </button>
+  </div>
+</header>
+
+<!-- ══════════════════ MOBILE NAV ══════════════════ -->
+<div id="mobile-nav">
+  <a class="font-subheading text-[20px] uppercase tracking-[0.25em] text-on-background hover:text-secondary transition-colors" href="index.html">Início</a>
+  <a class="font-subheading text-[20px] uppercase tracking-[0.25em] text-secondary transition-colors" href="produtos.html">Produtos</a>
+  <a class="font-subheading text-[20px] uppercase tracking-[0.25em] text-on-background hover:text-secondary transition-colors" href="index.html#collections">Coleções</a>
+  <a class="font-subheading text-[20px] uppercase tracking-[0.25em] text-on-background hover:text-secondary transition-colors" href="index.html#story">Sobre a Femme</a>
+</div>
+
+<!-- ══════════════════ MAIN ══════════════════ -->
+<main>
+
+  <!-- Hero Banner -->
+  <section class="relative w-full h-[350px] flex items-center justify-center overflow-hidden">
+    <div class="absolute inset-0 bg-cover bg-center" style="background-image: url('images/BANNER.png'); filter: brightness(0.4);"></div>
+    <div class="absolute inset-0 bg-gradient-to-t from-background via-transparent to-black/50"></div>
+    <div class="relative z-10 text-center mt-[80px] px-margin-edge">
+      <span class="block font-subheading text-subheading uppercase tracking-[0.3em] text-secondary mb-2">Coleção Completa</span>
+      <h1 class="font-display-lg text-4xl md:text-6xl text-on-background tracking-widest uppercase">Nossos Produtos</h1>
+    </div>
+  </section>
+
+  <!-- Products Section -->
+  <section class="py-16 px-margin-edge bg-background">
+    <!-- Category Filters -->
+    <div class="flex flex-wrap justify-center gap-6 md:gap-10 mb-16 border-b border-outline-variant/20 pb-6">
+      <button onclick="filterCategory('all')" class="filter-btn active font-subheading text-subheading uppercase tracking-widest text-on-background hover:text-secondary" id="filter-all">Todos</button>
+      <button onclick="filterCategory('conjuntos')" class="filter-btn font-subheading text-subheading uppercase tracking-widest text-on-background hover:text-secondary" id="filter-conjuntos">Conjuntos</button>
+      <button onclick="filterCategory('espartilhos')" class="filter-btn font-subheading text-subheading uppercase tracking-widest text-on-background hover:text-secondary" id="filter-espartilhos">Espartilhos</button>
+      <button onclick="filterCategory('camisolas')" class="filter-btn font-subheading text-subheading uppercase tracking-widest text-on-background hover:text-secondary" id="filter-camisolas">Camisolas</button>
+      <button onclick="filterCategory('sutias')" class="filter-btn font-subheading text-subheading uppercase tracking-widest text-on-background hover:text-secondary" id="filter-sutias">Sutiãs</button>
+    </div>
+
+    <!-- Products Grid -->
+    <div id="products-grid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-y-16 gap-x-gutter">
+      <!-- Carregado via Javascript -->
+    </div>
+  </section>
+
+</main>
+
+<!-- Footer -->
+<footer class="bg-surface-container-lowest rounded-none border-t border-outline-variant/10 w-full py-section-gap px-margin-edge grid grid-cols-1 md:grid-cols-4 gap-gutter text-on-surface">
+  <div class="flex flex-col gap-stack-md">
+    <h2 class="font-headline-lg text-headline-lg text-on-surface uppercase mb-stack-lg tracking-widest">FEMME</h2>
+    <p class="font-label-sm text-label-sm text-on-surface-variant tracking-wider mt-auto">© 2026 FEMME LINGERIE. ALL RIGHTS RESERVED.</p>
+  </div>
+  <div class="flex flex-col gap-stack-sm">
+    <h3 class="font-subheading text-subheading uppercase mb-stack-sm tracking-widest text-on-surface-variant">Shop</h3>
+    <a class="font-body-md text-body-md text-on-surface-variant hover:text-secondary transition-colors duration-200" href="produtos.html">Todos os Produtos</a>
+    <a class="font-body-md text-body-md text-on-surface-variant hover:text-secondary transition-colors duration-200" href="index.html#collections">Coleções</a>
+  </div>
+  <div class="flex flex-col gap-stack-sm">
+    <h3 class="font-subheading text-subheading uppercase mb-stack-sm tracking-widest text-on-surface-variant">About</h3>
+    <a class="font-body-md text-body-md text-on-surface-variant hover:text-secondary transition-colors duration-200" href="index.html#story">Sobre a Femme</a>
+    <a class="font-body-md text-body-md text-on-surface-variant hover:text-secondary transition-colors duration-200" href="#">FAQ</a>
+  </div>
+  <div class="flex flex-col gap-stack-sm">
+    <h3 class="font-subheading text-subheading uppercase mb-stack-sm tracking-widest text-on-surface-variant">Support</h3>
+    <a class="font-body-md text-body-md text-on-surface-variant hover:text-secondary transition-colors duration-200" href="#">Shipping</a>
+    <a class="font-body-md text-body-md text-on-surface-variant hover:text-secondary transition-colors duration-200" href="#">Returns</a>
+    <div class="flex gap-4 mt-stack-md">
+      <a class="text-on-surface-variant hover:text-secondary transition-colors duration-200 font-label-sm text-label-sm uppercase tracking-widest" href="#">Instagram</a>
+      <a class="text-on-surface-variant hover:text-secondary transition-colors duration-200 font-label-sm text-label-sm uppercase tracking-widest" href="#">WhatsApp</a>
+    </div>
+    <a id="admin-access-link" href="#" class="font-subheading text-subheading text-on-background hover:text-secondary transition-colors" title="Admin Access">Admin</a>
+  </div>
+</footer>
+  <!-- Admin Modal -->
+  <div id="admin-scrim" class="fixed inset-0 bg-black/60 hidden z-40"></div>
+  <div id="admin-modal" class="fixed inset-0 flex items-center justify-center hidden z-50">
+    <div class="bg-white/10 backdrop-blur-lg p-8 rounded-xl w-full max-w-lg relative">
+        <button id="admin-close-btn" class="absolute top-4 right-4 text-on-background hover:text-secondary transition-colors text-2xl">&times;</button>
+      <h2 class="font-subheading text-subheading mb-4 text-on-background">Painel de Admin</h2>
+      <div id="admin-login" class="mb-4">
+        <label class="block text-on-background mb-2">Senha (5 dígitos)</label>
+        <input type="password" id="admin-pass" maxlength="5" class="w-full border border-outline-variant p-2 rounded bg-gray-100" />
+        <button id="admin-login-btn" class="mt-2 w-full bg-secondary text-background py-2 rounded">Entrar</button>
+      </div>
+      <div id="admin-panel" class="hidden">
+        <form id="product-form" class="space-y-2">
+          <input type="text" id="prod-title" placeholder="Título" class="w-full border p-2 rounded" required />
+          <input type="number" step="0.01" id="prod-price" placeholder="Preço" class="w-full border p-2 rounded" required />
+          <input type="file" id="prod-image" accept="image/*" class="w-full border p-2 rounded" required />
+          <textarea id="prod-desc" placeholder="Descrição" class="w-full border p-2 rounded" required></textarea>
+          <input type="text" id="prod-category" placeholder="Categoria" class="w-full border p-2 rounded" required />
+          <input type="text" id="prod-sizes" placeholder="Tamanhos (separados por vírgula)" class="w-full border p-2 rounded" required />
+          <button type="submit" class="w-full bg-primary text-background py-2 rounded">Adicionar Produto</button>
+        </form>
+        <button id="admin-logout" class="mt-4 w-full bg-outline-variant text-on-surface-variant py-2 rounded">Sair</button>
+      </div>
+    </div>
+  </div>
+  <script src="admin.js"></script>
+
+<!-- ══════════════════ CART DRAWER ══════════════════ -->
+<div id="cart-scrim"></div>
+<div id="cart-drawer">
+  <div class="flex justify-between items-center px-6 py-4 border-b border-outline-variant/30">
+    <span class="font-subheading text-subheading uppercase tracking-widest text-on-background">Seu Carrinho</span>
+    <button id="cart-close-btn" class="text-on-surface-variant hover:text-secondary transition-colors">
+      <span class="material-symbols-outlined">close</span>
+    </button>
+  </div>
+  <div id="cart-items" class="flex-1 overflow-y-auto px-6 py-4 flex flex-col gap-4">
+    <div id="cart-empty" class="text-center text-on-surface-variant text-sm pt-20">Seu carrinho está vazio.</div>
+  </div>
+  <div class="px-6 py-5 border-t border-outline-variant/30 bg-background">
+    <div class="flex justify-between text-sm mb-4">
+      <span class="text-on-surface-variant font-subheading tracking-wider uppercase">Subtotal</span>
+      <span id="cart-subtotal" class="text-secondary font-medium">R$ 0,00</span>
+    </div>
+    <button id="checkout-btn" class="w-full border border-secondary text-on-background font-subheading text-subheading uppercase tracking-[0.2em] py-4 hover:bg-secondary hover:text-background transition-all duration-500 rounded-none flex items-center justify-center gap-2">
+      <span class="material-symbols-outlined text-[18px]">chat</span>
+      Finalizar no WhatsApp
+    </button>
+  </div>
+</div>
+
+<!-- ══════════════════ SEARCH OVERLAY ══════════════════ -->
+<div id="search-overlay">
+  <button id="search-close-btn" class="absolute top-6 right-[5vw] text-on-surface-variant hover:text-secondary transition-colors">
+    <span class="material-symbols-outlined text-3xl">close</span>
+  </button>
+  <div class="w-full max-w-xl flex items-center border-b-2 border-outline pb-2 mb-10">
+    <input id="search-input" type="text" placeholder="O que você procura?" class="flex-1 bg-transparent border-none text-on-background text-2xl font-light font-body-md outline-none placeholder-outline"/>
+    <span class="material-symbols-outlined text-on-surface-variant text-3xl">search</span>
+  </div>
+  <p id="search-label" class="font-label-sm text-label-sm text-on-surface-variant mb-6"></p>
+  <div id="search-results" class="w-full max-w-4xl overflow-y-auto grid grid-cols-2 md:grid-cols-4 gap-gutter"></div>
+</div>
+
+<!-- ══════════════════ QUICK VIEW MODAL ══════════════════ -->
+<div id="qv-overlay">
+  <div id="qv-modal">
+    <button onclick="closeQV()" class="absolute top-4 right-4 text-on-surface-variant hover:text-secondary transition-colors z-10">
+      <span class="material-symbols-outlined">close</span>
+    </button>
+    <div id="qv-img-wrap" class="relative aspect-[3/4] md:aspect-auto">
+      <img id="qv-img" src="" alt="" class="w-full h-full object-cover"/>
+    </div>
+    <div class="p-8 md:p-10 flex flex-col justify-center gap-4">
+      <span id="qv-badge" class="font-label-sm text-label-sm text-secondary"></span>
+      <h2 id="qv-title" class="font-headline-lg text-headline-lg-mobile md:text-[36px] text-on-background leading-tight"></h2>
+      <p id="qv-price" class="text-secondary text-xl font-medium"></p>
+      <p id="qv-desc" class="text-on-surface-variant text-sm leading-relaxed"></p>
+      <div>
+        <p class="font-label-sm text-label-sm text-on-background mb-2">Tamanho</p>
+        <div id="qv-sizes" class="flex gap-2 mb-4"></div>
+      </div>
+      <button id="qv-add-btn" class="border border-secondary text-on-background font-subheading text-subheading uppercase tracking-[0.2em] py-4 hover:bg-secondary hover:text-background transition-all duration-500 rounded-none">
+        Adicionar ao Carrinho
+      </button>
+    </div>
+  </div>
+</div>
+
+<script>
+// ── PRODUCTS DATABASE ──────────────────────────────────
+const PRODUCTS = [
+  {
+    id: 1,
+    title: 'Camisola Vermelha Femme',
+    price: 450.00,
+    image: 'images/prod_red_camisole.png',
+    description: 'Confeccionada em seda pura italiana e renda chantilly francesa. Caimento fluido impecável e alças delicadas reguláveis que valorizam a silhueta com extrema elegância.',
+    badge: 'Best Seller',
+    category: 'camisolas',
+    sizes: ['P', 'M', 'G', 'GG']
+  },
+  {
+    id: 2,
+    title: 'Conjunto Noir Elegance',
+    price: 380.00,
+    image: 'images/prod_noir_elegance.png',
+    description: 'Um clássico indispensável em renda onyx de alta costura. Sutiã estruturado e calcinha hot pant rendada. Conforto extraordinário aliado à sensualidade atemporal do preto profundo.',
+    badge: 'Novidade',
+    category: 'conjuntos',
+    sizes: ['P', 'M', 'G']
+  },
+  {
+    id: 3,
+    title: 'Espartilho Champagne',
+    price: 520.00,
+    image: 'images/prod_champagne_corset.png',
+    description: 'Peça escultural estruturada com barbatanas flexíveis e amarração clássica. Cetim encorpado de brilho suave e detalhes em renda manual que desenham as curvas com precisão.',
+    badge: 'Edição Limitada',
+    category: 'espartilhos',
+    sizes: ['P', 'M', 'G', 'GG']
+  },
+  {
+    id: 4,
+    title: 'Sutiã Rose Gold Detail',
+    price: 290.00,
+    image: 'images/prod_rose_gold_bra.png',
+    description: 'Bordado exclusivo em fios metálicos sobre tule invisível. Cria uma ilusão sofisticada de joia sobre a pele, perfeito para momentos em que delicadeza e luxo andam lado a lado.',
+    badge: 'Mais Desejado',
+    category: 'sutias',
+    sizes: ['P', 'M', 'G']
+  },
+  {
+    id: 5,
+    title: 'Robe de Seda Imperial',
+    price: 480.00,
+    image: 'images/cat_premium_robes.png',
+    description: 'Robe longo confeccionado em seda pura premium com detalhes em renda delicada nos punhos e na barra. O toque de suavidade ideal para momentos de relaxamento refinado.',
+    badge: 'Luxo',
+    category: 'camisolas',
+    sizes: ['P', 'M', 'G', 'GG']
+  },
+  {
+    id: 6,
+    title: 'Corset Rendado Black Velvet',
+    price: 540.00,
+    image: 'images/cat_silk_corsets.png',
+    description: 'Corset estruturado com barbatanas metálicas flexíveis e acabamento em veludo de seda italiano. Uma peça que transborda sensualidade e sofisticação artística.',
+    badge: 'Exclusivo',
+    category: 'espartilhos',
+    sizes: ['P', 'M', 'G']
+  }
+];
+
+// WhatsApp Telefone de Contato (Configuração)
+const CONTACT_PHONE = '5511999999999';
+
+// ── SELECTED SIZES STATE (FOR EACH CARD) ────────────────
+const selectedSizes = {};
+
+// Inicializa tamanhos padrão para cada produto
+PRODUCTS.forEach(p => {
+  selectedSizes[p.id] = p.sizes[0];
+});
+
+// ── CART STATE ────────────────────────────────────────
+let cart = JSON.parse(localStorage.getItem('femme_cart') || '[]');
+let qvSelectedSize = null;
+let qvProductIdx = null;
+
+// ── HEADER SCROLL ──────────────────────────────────────
+window.addEventListener('scroll', () => {
+  const h = document.getElementById('site-header');
+  if (window.scrollY > 40) {
+    h.classList.remove('bg-background/0','border-transparent');
+    h.classList.add('bg-background/85','border-outline-variant/20');
+  } else {
+    h.classList.add('bg-background/0','border-transparent');
+    h.classList.remove('bg-background/85','border-outline-variant/20');
+  }
+});
+
+// ── MOBILE MENU ────────────────────────────────────────
+const menuBtn = document.getElementById('menu-btn');
+const mobileNav = document.getElementById('mobile-nav');
+menuBtn.addEventListener('click', () => {
+  const open = mobileNav.classList.toggle('active');
+  menuBtn.querySelector('span').textContent = open ? 'close' : 'menu';
+  document.body.style.overflow = open ? 'hidden' : '';
+});
+
+// ── RENDER PRODUCTS GRID ────────────────────────────────
+function renderProducts(category = 'all') {
+  const grid = document.getElementById('products-grid');
+  grid.innerHTML = '';
+
+  const filtered = category === 'all' 
+    ? PRODUCTS 
+    : PRODUCTS.filter(p => p.category === category);
+
+  filtered.forEach(p => {
+    const card = document.createElement('div');
+    card.className = 'group relative rounded-none flex flex-col gap-stack-sm bg-surface-container-lowest/30 p-4 border border-outline-variant/10 hover:border-outline-variant/40 transition-all duration-300';
+    
+    // Badge HTML
+    const badgeHTML = p.badge 
+      ? `<span class="absolute top-stack-sm left-stack-sm bg-secondary text-background font-label-sm text-[10px] px-3 py-1 uppercase tracking-widest z-10">${p.badge}</span>`
+      : '';
+
+    // Sizes buttons HTML
+    let sizesHTML = '';
+    p.sizes.forEach(size => {
+      const isSelected = selectedSizes[p.id] === size;
+      sizesHTML += `
+        <button 
+          onclick="selectCardSize(${p.id}, '${size}')" 
+          class="size-btn font-subheading flex items-center justify-center ${isSelected ? 'selected' : ''}" 
+          id="size-btn-${p.id}-${size}"
+        >${size}</button>
+      `;
+    });
+
+    card.innerHTML = `
+      <div class="relative aspect-[2/3] overflow-hidden bg-surface-container-low rounded-none">
+        ${badgeHTML}
+        <img class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105 zoom-target" src="${p.image}" alt="${p.title}"/>
+        <div class="absolute inset-0 bg-black/40 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+          <button onclick="openProductQV(${p.id})" class="border border-on-background text-on-background px-6 py-2 font-subheading text-subheading uppercase tracking-wider hover:bg-on-background hover:text-background transition-colors rounded-none">
+            Quick View
+          </button>
+        </div>
+      </div>
+      <div class="flex flex-col gap-3 mt-4">
+        <div>
+          <h4 class="font-body-lg text-body-lg text-on-background font-medium">${p.title}</h4>
+          <p class="font-body-md text-body-md text-secondary mt-1">R$ ${p.price.toFixed(2).replace('.', ',')}</p>
+        </div>
+        <p class="text-on-surface-variant text-xs font-light line-clamp-2 h-8">${p.description}</p>
+        
+        <div>
+          <p class="font-label-sm text-[11px] text-on-surface-variant uppercase tracking-wider mb-2">Tamanho</p>
+          <div class="flex gap-2 mb-2" id="sizes-container-${p.id}">
+            ${sizesHTML}
+          </div>
+        </div>
+
+        <button onclick="sendInterest(${p.id})" class="w-full border border-secondary text-on-background font-subheading text-[12px] uppercase tracking-[0.2em] py-3.5 hover:bg-secondary hover:text-background transition-all duration-500 rounded-none flex items-center justify-center gap-2">
+          <span class="material-symbols-outlined text-[18px]">chat</span>
+          Tenho Interesse
+        </button>
+      </div>
+    `;
+
+    grid.appendChild(card);
+  });
+}
+
+// ── SELECT SIZE IN CARD ────────────────────────────────
+window.selectCardSize = function(productId, size) {
+  selectedSizes[productId] = size;
+  
+  // Atualiza as classes do botão
+  const p = PRODUCTS.find(prod => prod.id === productId);
+  p.sizes.forEach(s => {
+    const btn = document.getElementById(`size-btn-${productId}-${s}`);
+    if (btn) {
+      if (s === size) {
+        btn.classList.add('selected');
+      } else {
+        btn.classList.remove('selected');
+      }
+    }
+  });
+};
+
+// ── SEND INTEREST WHATSAPP ─────────────────────────────
+window.sendInterest = function(productId) {
+  const p = PRODUCTS.find(prod => prod.id === productId);
+  const size = selectedSizes[productId];
+  
+  const text = `Olá Femme Lingerie! Tenho interesse no seguinte produto:\n\n• *${p.title}*\n• Tamanho: *${size}*\n• Valor: *R$ ${p.price.toFixed(2).replace('.', ',')}*\n\nPor favor, me informe a disponibilidade e formas de envio.`;
+  
+  const url = `https://wa.me/${CONTACT_PHONE}?text=${encodeURIComponent(text)}`;
+  window.open(url, '_blank');
+};
+
+// ── FILTER CATEGORIES ──────────────────────────────────
+window.filterCategory = function(category) {
+  // Reset all buttons
+  document.querySelectorAll('.filter-btn').forEach(btn => {
+    btn.classList.remove('active');
+  });
+
+  // Activate clicked
+  document.getElementById(`filter-${category}`).classList.add('active');
+
+  // Render
+  renderProducts(category);
+};
+
+// ── CART FUNCTIONS ─────────────────────────────────────
+function saveCart() { localStorage.setItem('femme_cart', JSON.stringify(cart)); }
+
+function renderCart() {
+  const container = document.getElementById('cart-items');
+  const empty = document.getElementById('cart-empty');
+  const badge = document.getElementById('cart-badge');
+  const subtotalEl = document.getElementById('cart-subtotal');
+
+  // Remove existing items (keep empty msg)
+  container.querySelectorAll('.cart-item').forEach(el => el.remove());
+
+  let total = 0, count = 0;
+  cart.forEach((item, idx) => {
+    total += item.price * item.qty;
+    count += item.qty;
+    const div = document.createElement('div');
+    div.className = 'cart-item';
+    div.innerHTML = `
+      <img src="${item.image}" alt="${item.title}">
+      <div class="flex flex-col justify-between flex-1">
+        <div>
+          <p class="text-on-background text-sm font-medium leading-snug">${item.title}</p>
+          <p class="text-on-surface-variant text-xs mt-1">Tam: ${item.size}</p>
+        </div>
+        <p class="text-secondary text-sm">R$ ${(item.price * item.qty).toFixed(2).replace('.',',')}</p>
+        <div class="qty-ctrl flex items-center gap-2 mt-1">
+          <button onclick="changeQty(${idx},-1)">-</button>
+          <span class="text-on-background text-sm min-w-[20px] text-center">${item.qty}</span>
+          <button onclick="changeQty(${idx},1)">+</button>
+        </div>
+      </div>
+      <button onclick="removeItem(${idx})" class="text-outline hover:text-red-400 transition-colors self-start">
+        <span class="material-symbols-outlined text-[18px]">delete</span>
+      </button>`;
+    container.insertBefore(div, empty);
+  });
+
+  empty.style.display = cart.length === 0 ? 'block' : 'none';
+  badge.textContent = count;
+  badge.classList.toggle('hidden', count === 0);
+  subtotalEl.textContent = 'R$ ' + total.toFixed(2).replace('.',',');
+}
+
+window.changeQty = function(idx, delta) {
+  cart[idx].qty += delta;
+  if (cart[idx].qty <= 0) cart.splice(idx, 1);
+  saveCart(); renderCart();
+};
+window.removeItem = function(idx) {
+  cart.splice(idx, 1);
+  saveCart(); renderCart();
+};
+function addToCart(product, size) {
+  const ex = cart.find(i => i.title === product.title && i.size === size);
+  if (ex) ex.qty++;
+  else cart.push({ title: product.title, price: product.price, image: product.image, size, qty: 1 });
+  saveCart(); renderCart();
+}
+
+// Cart open/close
+document.getElementById('cart-btn').addEventListener('click', openCart);
+document.getElementById('cart-close-btn').addEventListener('click', closeCart);
+document.getElementById('cart-scrim').addEventListener('click', closeCart);
+
+function openCart() {
+  document.getElementById('cart-drawer').classList.add('open');
+  document.getElementById('cart-scrim').classList.add('active');
+  document.body.style.overflow = 'hidden';
+}
+function closeCart() {
+  document.getElementById('cart-drawer').classList.remove('open');
+  document.getElementById('cart-scrim').classList.remove('active');
+  document.body.style.overflow = '';
+}
+
+// Checkout WhatsApp
+document.getElementById('checkout-btn').addEventListener('click', () => {
+  if (!cart.length) return;
+  let msg = 'Olá Femme! Gostaria de pedir:\n\n';
+  let total = 0;
+  cart.forEach(i => {
+    msg += `• ${i.title} (Tam: ${i.size}) x${i.qty} = R$ ${(i.price*i.qty).toFixed(2).replace('.',',')}\n`;
+    total += i.price * i.qty;
+  });
+  msg += `\nTotal: R$ ${total.toFixed(2).replace('.',',')}`;
+  window.open(`https://wa.me/${CONTACT_PHONE}?text=` + encodeURIComponent(msg), '_blank');
+});
+
+// ── SEARCH ────────────────────────────────────────────
+document.getElementById('search-btn').addEventListener('click', () => {
+  document.getElementById('search-overlay').classList.add('active');
+  document.body.style.overflow = 'hidden';
+  setTimeout(() => document.getElementById('search-input').focus(), 300);
+});
+document.getElementById('search-close-btn').addEventListener('click', closeSearch);
+function closeSearch() {
+  document.getElementById('search-overlay').classList.remove('active');
+  document.getElementById('search-input').value = '';
+  document.getElementById('search-results').innerHTML = '';
+  document.getElementById('search-label').textContent = '';
+  document.body.style.overflow = '';
+}
+document.getElementById('search-input').addEventListener('input', function() {
+  const q = this.value.toLowerCase().trim();
+  const results = document.getElementById('search-results');
+  const label = document.getElementById('search-label');
+  results.innerHTML = '';
+  if (q.length < 2) { label.textContent = ''; return; }
+  
+  const found = PRODUCTS.filter(p => p.title.toLowerCase().includes(q) || p.description.toLowerCase().includes(q));
+  label.textContent = found.length + ' resultado(s)';
+  found.forEach((p, i) => {
+    const div = document.createElement('div');
+    div.className = 'group flex flex-col gap-2 cursor-pointer';
+    div.innerHTML = `
+      <div class="aspect-[3/4] overflow-hidden bg-surface-container-low relative">
+        <img src="${p.image}" alt="${p.title}" class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105">
+        <div class="absolute inset-0 bg-black/40 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+          <button class="border border-on-background text-on-background px-4 py-2 font-subheading text-[11px] uppercase tracking-wider hover:bg-on-background hover:text-background transition-colors rounded-none">Quick View</button>
+        </div>
+      </div>
+      <p class="text-on-background text-sm text-center">${p.title}</p>
+      <p class="text-secondary text-sm text-center">R$ ${p.price.toFixed(2).replace('.',',')}</p>`;
+    const btn = div.querySelector('button');
+    btn.addEventListener('click', () => { closeSearch(); openProductQV(p.id); });
+    results.appendChild(div);
+  });
+});
+
+// ── QUICK VIEW MODAL ──────────────────────────────────
+window.openProductQV = function(productId) {
+  const p = PRODUCTS.find(prod => prod.id === productId);
+  const idx = PRODUCTS.indexOf(p);
+  qvProductIdx = idx;
+  qvSelectedSize = p.sizes[0];
+  document.getElementById('qv-img').src = p.image;
+  document.getElementById('qv-img').alt = p.title;
+  document.getElementById('qv-badge').textContent = p.badge || '';
+  document.getElementById('qv-title').textContent = p.title;
+  document.getElementById('qv-price').textContent = 'R$ ' + p.price.toFixed(2).replace('.',',');
+  document.getElementById('qv-desc').textContent = p.description;
+  
+  const sizesEl = document.getElementById('qv-sizes');
+  sizesEl.innerHTML = '';
+  p.sizes.forEach(s => {
+    const btn = document.createElement('button');
+    btn.className = 'size-btn font-subheading' + (s === qvSelectedSize ? ' selected' : '');
+    btn.textContent = s;
+    btn.addEventListener('click', () => {
+      sizesEl.querySelectorAll('.size-btn').forEach(b => b.classList.remove('selected'));
+      btn.classList.add('selected');
+      qvSelectedSize = s;
+    });
+    sizesEl.appendChild(btn);
+  });
+  
+  document.getElementById('qv-overlay').classList.add('active');
+  document.body.style.overflow = 'hidden';
+};
+
+window.closeQV = function() {
+  document.getElementById('qv-overlay').classList.remove('active');
+  document.body.style.overflow = '';
+};
+
+document.getElementById('qv-overlay').addEventListener('click', e => {
+  if (e.target === document.getElementById('qv-overlay')) closeQV();
+});
+
+document.getElementById('qv-add-btn').addEventListener('click', function() {
+  const p = PRODUCTS[qvProductIdx];
+  addToCart(p, qvSelectedSize);
+  this.textContent = 'Adicionado! ✓';
+  this.classList.add('bg-secondary/20');
+  setTimeout(() => {
+    closeQV();
+    openCart();
+    this.textContent = 'Adicionar ao Carrinho';
+    this.classList.remove('bg-secondary/20');
+  }, 800);
+});
+
+// ── INIT ──────────────────────────────────────────────
+renderProducts();
+renderCart();
+</script>
+
+</body>
+</html>
