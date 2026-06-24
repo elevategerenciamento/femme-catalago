@@ -64,7 +64,7 @@
     const formData = new FormData();
     formData.append('file', file);
     formData.append('upload_preset', 'femme_upload');
-    const res = await fetch('https://api.cloudinary.com/v1_1/dy5lgxsk5/image/upload', {
+    const res = await fetch('https://api.cloudinary.com/v1_1/dy5igxsk5/image/upload', {
       method: 'POST',
       body: formData
     });
