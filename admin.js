@@ -68,8 +68,8 @@
       method: 'POST',
       body: formData
     });
-    if (!res.ok) throw new Error('Falha ao fazer upload da imagem no Cloudinary');
     const data = await res.json();
+    if (!res.ok) throw new Error('Cloudinary: ' + (data.error?.message || JSON.stringify(data)));
     return data.secure_url;
   };
 
