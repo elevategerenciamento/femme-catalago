@@ -59,14 +59,18 @@
     });
   }
 
-  // ---------- Firebase Storage Upload Helper ----------
-  const uploadImageToStorage = async (file) => {
-    const ext = file.name.split('.').pop() || 'jpg';
-    const filename = `produtos/${Date.now()}_${Math.random().toString(36).slice(2)}.${ext}`;
-    const storageRef = window.storage.ref(filename);
-    const snapshot = await storageRef.put(file);
-    const downloadURL = await snapshot.ref.getDownloadURL();
-    return downloadURL;
+  // ---------- Cloudinary Upload Helper ----------
+  const uploadImageToCloudinary = async (file) => {
+    const formData = new FormData();
+    formData.append('file', file);
+    formData.append('upload_preset', 'femme_upload');
+    const res = await fetch('https://api.cloudinary.com/v1_1/dy5lgxsk5/image/upload', {
+      method: 'POST',
+      body: formData
+    });
+    if (!res.ok) throw new Error('Falha ao fazer upload da imagem no Cloudinary');
+    const data = await res.json();
+    return data.secure_url;
   };
 
   // ---------- Functions ----------
@@ -220,7 +224,7 @@
     try {
       let imageUrl = '';
       if (file) {
-        imageUrl = await uploadImageToStorage(file);
+        imageUrl = await uploadImageToCloudinary(file);
       }
 
       if (window.__editingProductId) {
