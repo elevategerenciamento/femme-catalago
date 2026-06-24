@@ -1640,7 +1640,7 @@ document.querySelectorAll('#sizes-selector .size-btn').forEach(btn => {
 });
 
 // Compressão de Imagem
-const compressImage = (file, maxWidth = 800, maxHeight = 800, quality = 0.7) => {
+const compressImage = (file, maxWidth = 400, maxHeight = 400, quality = 0.5) => {
   return new Promise((resolve, reject) => {
     const reader = new FileReader();
     reader.readAsDataURL(file);
@@ -1750,7 +1750,7 @@ window.handleAdminFormSubmit = async function(e) {
     adminNavTo('sec-products');
   } catch (err) {
     console.error(err);
-    alert('Erro ao salvar produto: ' + err.message);
+    alert('ERRO AO SALVAR: ' + (err.message || JSON.stringify(err)) + '\n\nCódigo: ' + (err.code || 'sem código'));
   } finally {
     submitBtn.disabled = false;
     submitBtn.textContent = originalBtnText;
