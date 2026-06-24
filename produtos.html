@@ -644,23 +644,66 @@
     .admin-form-footer .admin-btn-primary { flex: none !important; }
     .admin-form-footer .admin-btn-secondary { width: 100%; }
   }
+
+  /* PIN login styles */
+  .pin-container {
+    display: flex;
+    justify-content: center;
+    gap: 12px;
+    margin: 24px 0 16px;
+  }
+  .pin-box {
+    width: 48px;
+    height: 52px;
+    background: rgba(255,255,255,0.04);
+    border: 1px solid rgba(255,255,255,0.08);
+    border-radius: 10px;
+    text-align: center;
+    color: #e3e2e2;
+    font-size: 20px;
+    font-family: 'Montserrat', sans-serif;
+    outline: none;
+    transition: border-color 0.3s, background 0.3s;
+    box-sizing: border-box;
+  }
+  .pin-box:focus {
+    border-color: rgba(247,182,187,0.6);
+    background: rgba(255,255,255,0.08);
+  }
+  .pin-box.border-red-400 {
+    border-color: #f87171 !important;
+    background: rgba(248,113,113,0.05);
+  }
 </style>
 
 <div id="admin-overlay">
   <!-- ── LOGIN ── -->
   <div id="admin-login-screen">
     <div class="admin-login-card">
-      <div class="text-center mb-8">
+      <div class="text-center mb-6">
         <p style="font-family:'Montserrat',sans-serif;font-size:11px;letter-spacing:0.3em;color:#f7b6bb;text-transform:uppercase;margin-bottom:8px">Área Restrita</p>
-        <h2 style="font-family:'Playfair Display',serif;font-size:32px;color:#e3e2e2;font-weight:400">FEMME Admin</h2>
-      </div>
-      <div style="display:flex;flex-direction:column;gap:16px">
-        <div class="admin-field">
-          <label>Senha de acesso</label>
-          <input type="password" id="admin-pass" maxlength="5" placeholder="• • • • •" class="admin-input" autocomplete="off" />
+        <h2 style="font-family:'Playfair Display',serif;font-size:32px;color:#e3e2e2;font-weight:400;margin-bottom:16px">FEMME Admin</h2>
+        
+        <!-- Mensagem de Aviso -->
+        <div style="background: rgba(248, 113, 113, 0.04); border: 1px dashed rgba(248, 113, 113, 0.15); padding: 12px; border-radius: 8px; text-align: center;">
+          <p style="font-family:'Montserrat',sans-serif;font-size:11px;color:#f87171;margin:0;line-height:1.5;letter-spacing:0.02em">
+            <strong>ACESSO RESTRITO:</strong> Apenas pessoas autorizadas. Por favor, tente acessar somente se tiver permissão.
+          </p>
         </div>
-        <button id="admin-login-btn" class="admin-btn-primary">Entrar no Painel</button>
-        <p id="admin-login-err" style="display:none;text-align:center;color:#ff9999;font-size:12px;font-family:Montserrat,sans-serif">Senha incorreta. Tente novamente.</p>
+      </div>
+      <div style="display:flex;flex-direction:column;gap:12px">
+        <div class="admin-field" style="text-align:center">
+          <label style="margin-bottom:4px">Insira o PIN de 5 dígitos</label>
+          <div class="pin-container">
+            <input type="password" pattern="[0-9]*" inputmode="numeric" maxlength="1" class="pin-box" data-index="0" autocomplete="off" />
+            <input type="password" pattern="[0-9]*" inputmode="numeric" maxlength="1" class="pin-box" data-index="1" autocomplete="off" />
+            <input type="password" pattern="[0-9]*" inputmode="numeric" maxlength="1" class="pin-box" data-index="2" autocomplete="off" />
+            <input type="password" pattern="[0-9]*" inputmode="numeric" maxlength="1" class="pin-box" data-index="3" autocomplete="off" />
+            <input type="password" pattern="[0-9]*" inputmode="numeric" maxlength="1" class="pin-box" data-index="4" autocomplete="off" />
+          </div>
+        </div>
+        <button id="admin-login-btn" class="admin-btn-primary" style="display:none">Entrar no Painel</button>
+        <p id="admin-login-err" style="display:none;text-align:center;color:#ff9999;font-size:12px;font-family:Montserrat,sans-serif;margin-top:8px">PIN incorreto. Tente novamente.</p>
       </div>
       <button id="admin-close-btn" onclick="closeAdminPanel()" style="display:block;margin:24px auto 0;background:none;border:none;color:#4c4546;font-size:12px;letter-spacing:0.1em;text-transform:uppercase;font-family:Montserrat,sans-serif;cursor:pointer">← Voltar ao site</button>
     </div>
@@ -1291,8 +1334,12 @@ function openAdminPanel() {
   document.body.style.overflow = 'hidden';
   document.getElementById('admin-login-screen').style.display = 'flex';
   document.getElementById('admin-main').classList.remove('active');
-  document.getElementById('admin-pass').value = '';
   document.getElementById('admin-login-err').style.display = 'none';
+  
+  // Clear and focus first PIN box
+  const pinBoxes = document.querySelectorAll('.pin-box');
+  pinBoxes.forEach(b => b.value = '');
+  setTimeout(() => pinBoxes[0].focus(), 100);
 }
 
 window.closeAdminPanel = function() {
@@ -1300,10 +1347,36 @@ window.closeAdminPanel = function() {
   document.body.style.overflow = '';
 };
 
+// -- PIN inputs behavior --
+(function() {
+  const pinBoxes = document.querySelectorAll('.pin-box');
+  pinBoxes.forEach((box, idx) => {
+    // Only numbers allowed
+    box.addEventListener('input', () => {
+      box.value = box.value.replace(/[^0-9]/g, '');
+      if (box.value.length === 1 && idx < pinBoxes.length - 1) {
+        pinBoxes[idx + 1].focus();
+      }
+      // Auto-submit if all filled
+      if (Array.from(pinBoxes).every(b => b.value.length === 1)) {
+        document.getElementById('admin-login-btn').click();
+      }
+    });
+
+    box.addEventListener('keydown', (e) => {
+      if (e.key === 'Backspace' && box.value.length === 0 && idx > 0) {
+        pinBoxes[idx - 1].focus();
+      }
+    });
+  });
+})();
+
 // -- Login --
 document.getElementById('admin-login-btn').addEventListener('click', function() {
-  const val = document.getElementById('admin-pass').value.trim();
+  const pinBoxes = document.querySelectorAll('.pin-box');
+  const val = Array.from(pinBoxes).map(b => b.value).join('');
   const err = document.getElementById('admin-login-err');
+  
   if (val === ADMIN_PASSWORD) {
     err.style.display = 'none';
     document.getElementById('admin-login-screen').style.display = 'none';
@@ -1313,21 +1386,28 @@ document.getElementById('admin-login-btn').addEventListener('click', function() 
     adminRenderProducts();
     document.getElementById('admin-date').textContent = new Date().toLocaleDateString('pt-BR', {weekday:'long',day:'numeric',month:'long',year:'numeric'});
     adminNavTo('sec-dashboard');
+    // Clear
+    pinBoxes.forEach(b => b.value = '');
   } else {
     err.style.display = 'block';
-    document.getElementById('admin-pass').classList.add('border-red-400');
-    setTimeout(() => document.getElementById('admin-pass').classList.remove('border-red-400'), 1000);
+    pinBoxes.forEach(b => {
+      b.classList.add('border-red-400');
+      b.value = '';
+    });
+    pinBoxes[0].focus();
+    setTimeout(() => {
+      pinBoxes.forEach(b => b.classList.remove('border-red-400'));
+    }, 1000);
   }
-});
-document.getElementById('admin-pass').addEventListener('keydown', function(e) {
-  if (e.key === 'Enter') document.getElementById('admin-login-btn').click();
 });
 
 // -- Logout --
 document.getElementById('admin-logout').addEventListener('click', function() {
   document.getElementById('admin-main').classList.remove('active');
   document.getElementById('admin-login-screen').style.display = 'flex';
-  document.getElementById('admin-pass').value = '';
+  const pinBoxes = document.querySelectorAll('.pin-box');
+  pinBoxes.forEach(b => b.value = '');
+  setTimeout(() => pinBoxes[0].focus(), 100);
 });
 
 // -- Navigation --
