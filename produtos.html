@@ -257,10 +257,10 @@
     <!-- Category Filters -->
     <div class="flex flex-wrap justify-center gap-6 md:gap-10 mb-16 border-b border-outline-variant/20 pb-6">
       <button onclick="filterCategory('all')" class="filter-btn active font-subheading text-subheading uppercase tracking-widest text-on-background hover:text-secondary" id="filter-all">Todos</button>
-      <button onclick="filterCategory('conjuntos')" class="filter-btn font-subheading text-subheading uppercase tracking-widest text-on-background hover:text-secondary" id="filter-conjuntos">Conjuntos</button>
-      <button onclick="filterCategory('espartilhos')" class="filter-btn font-subheading text-subheading uppercase tracking-widest text-on-background hover:text-secondary" id="filter-espartilhos">Espartilhos</button>
       <button onclick="filterCategory('camisolas')" class="filter-btn font-subheading text-subheading uppercase tracking-widest text-on-background hover:text-secondary" id="filter-camisolas">Camisolas</button>
-      <button onclick="filterCategory('sutias')" class="filter-btn font-subheading text-subheading uppercase tracking-widest text-on-background hover:text-secondary" id="filter-sutias">Sutiãs</button>
+      <button onclick="filterCategory('lingeries')" class="filter-btn font-subheading text-subheading uppercase tracking-widest text-on-background hover:text-secondary" id="filter-lingeries">Lingeries</button>
+      <button onclick="filterCategory('modapraia')" class="filter-btn font-subheading text-subheading uppercase tracking-widest text-on-background hover:text-secondary" id="filter-modapraia">Moda Praia</button>
+      <button onclick="filterCategory('especiais')" class="filter-btn font-subheading text-subheading uppercase tracking-widest text-on-background hover:text-secondary" id="filter-especiais">Especiais</button>
     </div>
 
     <!-- Products Grid -->
@@ -763,11 +763,10 @@
               <label>Categoria *</label>
               <select id="prod-category" required>
                 <option value="" disabled selected>Selecione...</option>
-                <option value="conjuntos">Conjuntos</option>
-                <option value="espartilhos">Espartilhos</option>
                 <option value="camisolas">Camisolas</option>
-                <option value="sutias">Sutiãs</option>
-                <option value="outros">Outros</option>
+                <option value="lingeries">Lingeries</option>
+                <option value="modapraia">Moda Praia</option>
+                <option value="especiais">Especiais</option>
               </select>
             </div>
             <div class="admin-field">
@@ -886,7 +885,7 @@ const PRODUCTS = [
     image: 'images/prod_noir_elegance.png',
     description: 'Um clássico indispensável em renda onyx de alta costura. Sutiã estruturado e calcinha hot pant rendada. Conforto extraordinário aliado à sensualidade atemporal do preto profundo.',
     badge: 'Novidade',
-    category: 'conjuntos',
+    category: 'lingeries',
     sizes: ['P', 'M', 'G']
   },
   {
@@ -896,7 +895,7 @@ const PRODUCTS = [
     image: 'images/prod_champagne_corset.png',
     description: 'Peça escultural estruturada com barbatanas flexíveis e amarração clássica. Cetim encorpado de brilho suave e detalhes em renda manual que desenham as curvas com precisão.',
     badge: 'Edição Limitada',
-    category: 'espartilhos',
+    category: 'lingeries',
     sizes: ['P', 'M', 'G', 'GG']
   },
   {
@@ -906,7 +905,7 @@ const PRODUCTS = [
     image: 'images/prod_rose_gold_bra.png',
     description: 'Bordado exclusivo em fios metálicos sobre tule invisível. Cria uma ilusão sofisticada de joia sobre a pele, perfeito para momentos em que delicadeza e luxo andam lado a lado.',
     badge: 'Mais Desejado',
-    category: 'sutias',
+    category: 'lingeries',
     sizes: ['P', 'M', 'G']
   },
   {
@@ -926,7 +925,17 @@ const PRODUCTS = [
     image: 'images/cat_silk_corsets.png',
     description: 'Corset estruturado com barbatanas metálicas flexíveis e acabamento em veludo de seda italiano. Uma peça que transborda sensualidade e sofisticação artística.',
     badge: 'Exclusivo',
-    category: 'espartilhos',
+    category: 'especiais',
+    sizes: ['P', 'M', 'G']
+  },
+  {
+    id: 7,
+    title: 'Saída de Praia Santorini',
+    price: 360.00,
+    image: 'images/BANNER.png',
+    description: 'Saída de praia luxuosa com detalhes em renda guipir e amarração frontal. Fluidez e sofisticação incomparáveis para os dias ensolarados da Femme.',
+    badge: 'Novidade',
+    category: 'modapraia',
     sizes: ['P', 'M', 'G']
   }
 ];
@@ -1344,7 +1353,19 @@ function adminUpdateStats() {
 
 // -- Storage helpers --
 function adminGetProducts() {
-  return JSON.parse(localStorage.getItem(ADMIN_STORAGE_KEY) || '[]');
+  const prods = JSON.parse(localStorage.getItem(ADMIN_STORAGE_KEY) || '[]');
+  let migrated = false;
+  prods.forEach(p => {
+    // Map older categories to lingeries
+    if (p.category === 'conjuntos' || p.category === 'espartilhos' || p.category === 'sutias' || p.category === 'outros') {
+      p.category = 'lingeries';
+      migrated = true;
+    }
+  });
+  if (migrated) {
+    localStorage.setItem(ADMIN_STORAGE_KEY, JSON.stringify(prods));
+  }
+  return prods;
 }
 function adminSaveProducts(prods) {
   localStorage.setItem(ADMIN_STORAGE_KEY, JSON.stringify(prods));
