@@ -1640,7 +1640,7 @@ document.querySelectorAll('#sizes-selector .size-btn').forEach(btn => {
 });
 
 // Compressão de Imagem
-const compressImage = (file, maxWidth = 400, maxHeight = 400, quality = 0.5) => {
+const compressImage = (file, maxWidth = 800, maxHeight = 800, quality = 0.85) => {
   return new Promise((resolve, reject) => {
     const reader = new FileReader();
     reader.readAsDataURL(file);
