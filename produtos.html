@@ -916,6 +916,23 @@
   </div>
 </div>
 
+<script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-storage-compat.js"></script>
+<script>
+  const firebaseConfig = {
+    apiKey: "AIzaSyCY9HNv3yJITeeVI_8u75gysvfbukPbJ2s",
+    authDomain: "femme-catalago.firebaseapp.com",
+    projectId: "femme-catalago",
+    storageBucket: "femme-catalago.firebasestorage.app",
+    messagingSenderId: "336075206197",
+    appId: "1:336075206197:web:5374e29d2f63f9b8324b7c",
+    measurementId: "G-SPLE5VN7ZF"
+  };
+  firebase.initializeApp(firebaseConfig);
+  window.db = firebase.firestore();
+  window.storage = firebase.storage();
+</script>
 <script>
 // ── PRODUCTS DATABASE ──────────────────────────────────
 const PRODUCTS = [
@@ -1432,121 +1449,133 @@ document.querySelectorAll('.admin-nav-item').forEach(item => {
 });
 
 // -- Stats --
-function adminUpdateStats() {
-  const all = adminGetProducts();
-  document.getElementById('stat-total').textContent = all.length;
-  document.getElementById('stat-available').textContent = all.filter(p => p.available !== false).length;
-  document.getElementById('stat-unavailable').textContent = all.filter(p => p.available === false).length;
-}
-
-// -- Storage helpers --
-function adminGetProducts() {
-  const prods = JSON.parse(localStorage.getItem(ADMIN_STORAGE_KEY) || '[]');
-  let migrated = false;
-  prods.forEach(p => {
-    // Map older categories to lingeries
-    if (p.category === 'conjuntos' || p.category === 'espartilhos' || p.category === 'sutias' || p.category === 'outros') {
-      p.category = 'lingeries';
-      migrated = true;
-    }
-  });
-  if (migrated) {
-    localStorage.setItem(ADMIN_STORAGE_KEY, JSON.stringify(prods));
+async function adminUpdateStats() {
+  try {
+    const snapshot = await window.db.collection('produtos').get();
+    const all = [];
+    snapshot.forEach(doc => all.push(doc.data()));
+    document.getElementById('stat-total').textContent = all.length;
+    document.getElementById('stat-available').textContent = all.filter(p => p.available !== false).length;
+    document.getElementById('stat-unavailable').textContent = all.filter(p => p.available === false).length;
+  } catch (err) {
+    console.error(err);
   }
-  return prods;
-}
-function adminSaveProducts(prods) {
-  localStorage.setItem(ADMIN_STORAGE_KEY, JSON.stringify(prods));
-  // sync main PRODUCTS array
-  PRODUCTS.length = 0;
-  prods.filter(p => p.available !== false).forEach(p => PRODUCTS.push(p));
-  renderProducts(document.querySelector('.filter-btn.active')?.id?.replace('filter-','') || 'all');
-  adminUpdateStats();
 }
 
 // -- Product List --
-function adminRenderProducts() {
+async function adminRenderProducts() {
   const list = document.getElementById('admin-prod-list');
   const empty = document.getElementById('admin-prod-empty');
-  const prods = adminGetProducts();
-  list.innerHTML = '';
-  if (prods.length === 0) { empty.style.display = 'block'; return; }
-  empty.style.display = 'none';
-  prods.forEach(p => {
-    const row = document.createElement('div');
-    row.className = 'prod-row';
-    const isAvail = p.available !== false;
-    row.innerHTML = `
-      <img src="${p.image || ''}" alt="${p.title}" onerror="this.style.background='#1e2020'" />
-      <div class="prod-row-info" style="flex:1;min-width:0">
-        <p style="font-family:'Playfair Display',serif;font-size:16px;color:#e3e2e2;margin-bottom:4px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">${p.title}</p>
-        <p style="font-size:12px;color:#f7b6bb;font-family:Montserrat,sans-serif;margin-bottom:4px">R$ ${(+p.price).toFixed(2).replace('.',',')}</p>
-        <div style="display:flex;gap:8px;align-items:center;flex-wrap:wrap">
-          <span style="font-size:10px;color:#988e90;font-family:Montserrat,sans-serif;text-transform:uppercase;letter-spacing:0.1em">${p.category || '—'}</span>
-          <span style="color:#333;font-size:10px">·</span>
-          <span style="font-size:10px;color:#988e90;font-family:Montserrat,sans-serif">${(p.sizes||[]).join(', ')}</span>
-        </div>
-      </div>
-      <div class="prod-row-controls" style="display:flex;flex-direction:column;align-items:flex-end;gap:10px;flex-shrink:0">
-        <div style="display:flex;align-items:center;gap:10px">
-          <span class="status-badge ${isAvail ? 'status-on' : 'status-off'}" id="badge-${p.id}">${isAvail ? 'Disponível' : 'Indisponível'}</span>
-          <div class="toggle-wrap">
-            <label class="toggle">
-              <input type="checkbox" ${isAvail ? 'checked' : ''} onchange="adminToggleAvail(${p.id}, this.checked)" />
-              <div class="toggle-track"></div>
-              <div class="toggle-thumb"></div>
-            </label>
+  list.innerHTML = '<div style="color:#988e90;font-family:Montserrat,sans-serif;padding:20px;text-align:center">Carregando...</div>';
+  
+  try {
+    const snapshot = await window.db.collection('produtos').get();
+    const prods = [];
+    snapshot.forEach(doc => prods.push(doc.data()));
+    prods.sort((a, b) => a.id - b.id);
+    
+    list.innerHTML = '';
+    if (prods.length === 0) { empty.style.display = 'block'; return; }
+    empty.style.display = 'none';
+    prods.forEach(p => {
+      const row = document.createElement('div');
+      row.className = 'prod-row';
+      const isAvail = p.available !== false;
+      row.innerHTML = `
+        <img src="${p.image || ''}" alt="${p.title}" onerror="this.style.background='#1e2020'" />
+        <div class="prod-row-info" style="flex:1;min-width:0">
+          <p style="font-family:'Playfair Display',serif;font-size:16px;color:#e3e2e2;margin-bottom:4px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">${p.title}</p>
+          <p style="font-size:12px;color:#f7b6bb;font-family:Montserrat,sans-serif;margin-bottom:4px">R$ ${(+p.price).toFixed(2).replace('.',',')}</p>
+          <div style="display:flex;gap:8px;align-items:center;flex-wrap:wrap">
+            <span style="font-size:10px;color:#988e90;font-family:Montserrat,sans-serif;text-transform:uppercase;letter-spacing:0.1em">${p.category || '—'}</span>
+            <span style="color:#333;font-size:10px">·</span>
+            <span style="font-size:10px;color:#988e90;font-family:Montserrat,sans-serif">${(p.sizes||[]).join(', ')}</span>
           </div>
         </div>
-        <div class="prod-row-actions" style="display:flex;flex-direction:column;gap:8px">
-          <button class="admin-btn-secondary" onclick="adminEditProduct(${p.id})" style="font-size:11px;padding:8px 14px;display:flex;align-items:center;gap:6px">
-            <span class="material-symbols-outlined" style="font-size:14px">edit</span> Editar
-          </button>
-          <button class="admin-btn-danger" onclick="adminDeleteProduct(${p.id})" style="font-size:11px;padding:8px 14px;display:flex;align-items:center;gap:6px">
-            <span class="material-symbols-outlined" style="font-size:14px">delete</span> Excluir
-          </button>
+        <div class="prod-row-controls" style="display:flex;flex-direction:column;align-items:flex-end;gap:10px;flex-shrink:0">
+          <div style="display:flex;align-items:center;gap:10px">
+            <span class="status-badge ${isAvail ? 'status-on' : 'status-off'}" id="badge-${p.id}">${isAvail ? 'Disponível' : 'Indisponível'}</span>
+            <div class="toggle-wrap">
+              <label class="toggle">
+                <input type="checkbox" ${isAvail ? 'checked' : ''} onchange="adminToggleAvail(${p.id}, this.checked)" />
+                <div class="toggle-track"></div>
+                <div class="toggle-thumb"></div>
+              </label>
+            </div>
+          </div>
+          <div class="prod-row-actions" style="display:flex;flex-direction:column;gap:8px">
+            <button class="admin-btn-secondary" onclick="adminEditProduct(${p.id})" style="font-size:11px;padding:8px 14px;display:flex;align-items:center;gap:6px">
+              <span class="material-symbols-outlined" style="font-size:14px">edit</span> Editar
+            </button>
+            <button class="admin-btn-danger" onclick="adminDeleteProduct(${p.id})" style="font-size:11px;padding:8px 14px;display:flex;align-items:center;gap:6px">
+              <span class="material-symbols-outlined" style="font-size:14px">delete</span> Excluir
+            </button>
+          </div>
         </div>
-      </div>
-    `;
-    list.appendChild(row);
-  });
+      `;
+      list.appendChild(row);
+    });
+  } catch (err) {
+    console.error(err);
+    list.innerHTML = '<div style="color:red;padding:20px;text-align:center">Erro ao carregar produtos</div>';
+  }
 }
 
-window.adminToggleAvail = function(id, checked) {
-  const prods = adminGetProducts();
-  const p = prods.find(x => x.id === id);
-  if (p) { p.available = checked; adminSaveProducts(prods); }
-  const badge = document.getElementById(`badge-${id}`);
-  if (badge) {
-    badge.textContent = checked ? 'Disponível' : 'Indisponível';
-    badge.className = 'status-badge ' + (checked ? 'status-on' : 'status-off');
+window.adminToggleAvail = async function(id, checked) {
+  try {
+    await window.db.collection('produtos').doc(String(id)).update({ available: checked });
+    const badge = document.getElementById(`badge-${id}`);
+    if (badge) {
+      badge.textContent = checked ? 'Disponível' : 'Indisponível';
+      badge.className = 'status-badge ' + (checked ? 'status-on' : 'status-off');
+    }
+    const p = PRODUCTS.find(x => x.id === id);
+    if (p) p.available = checked;
+    renderProducts(document.querySelector('.filter-btn.active')?.id?.replace('filter-','') || 'all');
+  } catch (err) {
+    console.error(err);
+    alert('Erro ao alterar disponibilidade');
   }
 };
 
-window.adminDeleteProduct = function(id) {
+window.adminDeleteProduct = async function(id) {
   if (!confirm('Excluir este produto?')) return;
-  const prods = adminGetProducts().filter(p => p.id !== id);
-  adminSaveProducts(prods);
-  adminRenderProducts();
+  try {
+    await window.db.collection('produtos').doc(String(id)).delete();
+    adminRenderProducts();
+    const idx = PRODUCTS.findIndex(p => p.id === id);
+    if (idx !== -1) {
+      PRODUCTS.splice(idx, 1);
+      renderProducts(document.querySelector('.filter-btn.active')?.id?.replace('filter-','') || 'all');
+    }
+  } catch (err) {
+    console.error(err);
+    alert('Erro ao deletar produto');
+  }
 };
 
-window.adminEditProduct = function(id) {
-  const p = adminGetProducts().find(x => x.id === id);
-  if (!p) return;
-  __editingId = id;
-  document.getElementById('prod-title').value = p.title || '';
-  document.getElementById('prod-price').value = p.price || '';
-  document.getElementById('prod-desc').value = p.description || '';
-  document.getElementById('prod-category').value = p.category || '';
-  document.getElementById('prod-sizes').value = (p.sizes||[]).join(', ');
-  document.getElementById('prod-badge').value = p.badge || '';
-  if (p.image) {
-    const prev = document.getElementById('admin-img-preview');
-    prev.src = p.image; prev.style.display = 'block';
+window.adminEditProduct = async function(id) {
+  try {
+    const doc = await window.db.collection('produtos').doc(String(id)).get();
+    if (!doc.exists) return;
+    const p = doc.data();
+    __editingId = id;
+    document.getElementById('prod-title').value = p.title || '';
+    document.getElementById('prod-price').value = p.price || '';
+    document.getElementById('prod-desc').value = p.description || '';
+    document.getElementById('prod-category').value = p.category || '';
+    document.getElementById('prod-sizes').value = (p.sizes||[]).join(', ');
+    document.getElementById('prod-badge').value = p.badge || '';
+    if (p.image) {
+      const prev = document.getElementById('admin-img-preview');
+      prev.src = p.image; prev.style.display = 'block';
+    }
+    document.getElementById('form-section-title').textContent = 'Editar Produto';
+    document.getElementById('form-submit-btn').textContent = 'Salvar Alterações';
+    adminNavTo('sec-add');
+  } catch (err) {
+    console.error(err);
   }
-  document.getElementById('form-section-title').textContent = 'Editar Produto';
-  document.getElementById('form-submit-btn').textContent = 'Salvar Alterações';
-  adminNavTo('sec-add');
 };
 
 window.resetAdminForm = function() {
@@ -1560,6 +1589,11 @@ window.resetAdminForm = function() {
 
 window.handleAdminFormSubmit = async function(e) {
   e.preventDefault();
+  const submitBtn = document.getElementById('form-submit-btn');
+  const originalBtnText = submitBtn.textContent;
+  submitBtn.disabled = true;
+  submitBtn.textContent = 'Salvando...';
+
   const title = document.getElementById('prod-title').value.trim();
   const price = parseFloat(document.getElementById('prod-price').value);
   const desc = document.getElementById('prod-desc').value.trim();
@@ -1567,25 +1601,65 @@ window.handleAdminFormSubmit = async function(e) {
   const sizes = document.getElementById('prod-sizes').value.split(',').map(s=>s.trim()).filter(Boolean);
   const badge = document.getElementById('prod-badge').value.trim();
   const file = document.getElementById('prod-image').files[0];
-  const imageData = await new Promise(resolve => {
-    if (!file) { resolve(null); return; }
-    const r = new FileReader(); r.onload = () => resolve(r.result); r.readAsDataURL(file);
-  });
 
-  let prods = adminGetProducts();
-  if (__editingId) {
-    const p = prods.find(x => x.id === __editingId);
-    if (p) { p.title=title; p.price=price; p.description=desc; p.category=category; p.sizes=sizes; p.badge=badge; if(imageData) p.image=imageData; }
-  } else {
-    const newId = Date.now();
-    prods.push({ id:newId, title, price, image:imageData||'', description:desc, badge, category, sizes, available:true });
+  try {
+    let imageUrl = '';
+    if (file) {
+      const ref = window.storage.ref().child(`produtos/${Date.now()}_${file.name}`);
+      const uploadResult = await ref.put(file);
+      imageUrl = await uploadResult.ref.getDownloadURL();
+    }
+
+    if (__editingId) {
+      const docRef = window.db.collection('produtos').doc(String(__editingId));
+      const doc = await docRef.get();
+      const existingData = doc.exists ? doc.data() : {};
+      
+      const updatedProduct = {
+        id: __editingId,
+        title,
+        price,
+        description: desc,
+        category,
+        sizes,
+        badge,
+        image: imageUrl || existingData.image || '',
+        available: existingData.available !== false
+      };
+      await docRef.set(updatedProduct);
+      showAdminToast('Produto atualizado!');
+    } else {
+      const snapshot = await window.db.collection('produtos').get();
+      const prods = [];
+      snapshot.forEach(doc => prods.push(doc.data()));
+      const newId = (prods.reduce((max, p) => Math.max(max, p.id), 0) + 1) || Date.now();
+      
+      const newProduct = {
+        id: newId,
+        title,
+        price,
+        image: imageUrl || '',
+        description: desc,
+        badge,
+        category,
+        sizes,
+        available: true
+      };
+      await window.db.collection('produtos').doc(String(newId)).set(newProduct);
+      showAdminToast('Produto cadastrado!');
+    }
+
+    await loadProductsFromFirebase();
+    resetAdminForm();
+    __editingId = null;
+    adminNavTo('sec-products');
+  } catch (err) {
+    console.error(err);
+    alert('Erro ao salvar produto: ' + err.message);
+  } finally {
+    submitBtn.disabled = false;
+    submitBtn.textContent = originalBtnText;
   }
-  adminSaveProducts(prods);
-  resetAdminForm();
-  // Show success toast
-  showAdminToast(__editingId ? 'Produto atualizado!' : 'Produto cadastrado!');
-  __editingId = null;
-  adminNavTo('sec-products');
 };
 
 // Image preview
@@ -1607,15 +1681,33 @@ function showAdminToast(msg) {
   setTimeout(() => { t.style.opacity='0'; setTimeout(() => t.remove(), 400); }, 2500);
 }
 
-// Carregar produtos do storage ao iniciar
-(function() {
-  const storedProds = adminGetProducts();
-  if (storedProds.length > 0) {
-    PRODUCTS.length = 0;
-    storedProds.filter(p => p.available !== false).forEach(p => PRODUCTS.push(p));
-    renderProducts('all');
+// Carregar produtos do Firebase ao iniciar
+async function loadProductsFromFirebase() {
+  try {
+    const snapshot = await window.db.collection('produtos').get();
+    const dbProds = [];
+    snapshot.forEach(doc => {
+      dbProds.push(doc.data());
+    });
+    
+    if (dbProds.length > 0) {
+      PRODUCTS.length = 0;
+      dbProds.filter(p => p.available !== false).forEach(p => PRODUCTS.push(p));
+      renderProducts('all');
+    } else {
+      // Se o banco estiver vazio, populate com os produtos padrão do array
+      for (const p of PRODUCTS) {
+        await window.db.collection('produtos').doc(String(p.id)).set(p);
+      }
+      renderProducts('all');
+    }
+  } catch (err) {
+    console.error("Erro ao carregar produtos do Firebase:", err);
   }
-})();
+}
+
+// Iniciar carregamento
+loadProductsFromFirebase();
 </script>
 
 </body>

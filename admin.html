@@ -77,6 +77,23 @@
     </section>
   </main>
 
+  <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-storage-compat.js"></script>
+  <script>
+    const firebaseConfig = {
+      apiKey: "AIzaSyCY9HNv3yJITeeVI_8u75gysvfbukPbJ2s",
+      authDomain: "femme-catalago.firebaseapp.com",
+      projectId: "femme-catalago",
+      storageBucket: "femme-catalago.firebasestorage.app",
+      messagingSenderId: "336075206197",
+      appId: "1:336075206197:web:5374e29d2f63f9b8324b7c",
+      measurementId: "G-SPLE5VN7ZF"
+    };
+    firebase.initializeApp(firebaseConfig);
+    window.db = firebase.firestore();
+    window.storage = firebase.storage();
+  </script>
   <script src="admin.js"></script>
 </body>
 </html>

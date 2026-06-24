@@ -1,20 +1,8 @@
 // admin.js – Handles admin login and product CRUD (add, edit, delete) for both modal (produtos.html) and standalone page (admin.html)
 (() => {
   const ADMIN_PASSWORD = '12345';
-  const STORAGE_KEY = 'femme_products';
 
-  // Load products from storage if available
-  const stored = localStorage.getItem(STORAGE_KEY);
-  if (stored) {
-    try {
-      window.PRODUCTS = JSON.parse(stored);
-    } catch (e) {
-      console.error('Failed to parse stored products', e);
-      window.PRODUCTS = [];
-    }
-  } else {
-    window.PRODUCTS = [];
-  }
+  window.PRODUCTS = [];
 
   // ------------------- UI Helpers -------------------
   const isAdminPage = !!document.getElementById('admin-login');
@@ -51,7 +39,11 @@
     if (loginDiv) loginDiv.classList.remove('hidden');
     if (panelDiv) panelDiv.classList.add('hidden');
     if (passInput) passInput.value = '';
-    if (form) form.reset();
+    if (form) {
+      form.reset();
+      const fileInput = document.getElementById('prod-image');
+      if (fileInput) fileInput.required = true;
+    }
     if (imagePreview) imagePreview.classList.add('hidden');
     window.__editingProductId = null;
   };
@@ -66,11 +58,32 @@
     }
   };
 
+  // Load products from Firebase
+  const loadProductsFromFirebase = async () => {
+    try {
+      const snapshot = await window.db.collection('produtos').get();
+      window.PRODUCTS = [];
+      snapshot.forEach(doc => {
+        window.PRODUCTS.push(doc.data());
+      });
+      window.PRODUCTS.sort((a, b) => a.id - b.id);
+    } catch (e) {
+      console.error('Failed to load products from Firebase', e);
+      window.PRODUCTS = [];
+    }
+  };
+
   // Load and render product cards (admin page)
-  const loadProducts = () => {
+  const loadProducts = async () => {
     const listContainer = document.getElementById('admin-list');
     if (!listContainer) return;
+    listContainer.innerHTML = '<div class="text-white col-span-full text-center">Carregando produtos...</div>';
+    await loadProductsFromFirebase();
     listContainer.innerHTML = '';
+    if (window.PRODUCTS.length === 0) {
+      listContainer.innerHTML = '<div class="text-white col-span-full text-center">Nenhum produto cadastrado.</div>';
+      return;
+    }
     window.PRODUCTS.forEach(renderProductCard);
   };
 
@@ -113,20 +126,32 @@
     // Switch button text
     const submitBtn = form.querySelector('button[type="submit"]');
     if (submitBtn) submitBtn.textContent = 'Salvar Alteração';
+    // Make file input not required during edit
+    const fileInput = document.getElementById('prod-image');
+    if (fileInput) fileInput.required = false;
     // Scroll to form
     form.scrollIntoView({ behavior: 'smooth' });
   };
 
-  const handleDelete = (id) => {
+  const handleDelete = async (id) => {
     if (!confirm('Tem certeza que deseja excluir este produto?')) return;
-    window.PRODUCTS = window.PRODUCTS.filter(p => p.id !== id);
-    localStorage.setItem(STORAGE_KEY, JSON.stringify(window.PRODUCTS));
-    loadProducts();
+    try {
+      await window.db.collection('produtos').doc(String(id)).delete();
+      await loadProducts();
+    } catch (e) {
+      console.error('Erro ao deletar produto: ', e);
+      alert('Erro ao deletar produto');
+    }
   };
 
   // Form submission – add or edit
   const handleFormSubmit = async (e) => {
     e.preventDefault();
+    const submitBtn = form.querySelector('button[type="submit"]');
+    const originalBtnText = submitBtn.textContent;
+    submitBtn.disabled = true;
+    submitBtn.textContent = 'Salvando...';
+
     const title = document.getElementById('prod-title').value.trim();
     const price = parseFloat(document.getElementById('prod-price').value);
     const desc = document.getElementById('prod-desc').value.trim();
@@ -135,52 +160,74 @@
     const sizes = sizesRaw.split(',').map(s => s.trim()).filter(Boolean);
     const fileInput = document.getElementById('prod-image');
     const file = fileInput.files[0];
-    const imageData = await new Promise(resolve => {
-      if (!file) { resolve(''); return; }
-      const reader = new FileReader();
-      reader.onload = () => resolve(reader.result);
-      reader.readAsDataURL(file);
-    });
 
-    if (window.__editingProductId) {
-      const prod = window.PRODUCTS.find(p => p.id === window.__editingProductId);
-      if (prod) {
-        prod.title = title;
-        prod.price = price;
-        prod.description = desc;
-        prod.category = category;
-        prod.sizes = sizes;
-        if (imageData) prod.image = imageData;
+    try {
+      let imageUrl = '';
+      if (file) {
+        // Upload to Firebase Storage
+        const ref = window.storage.ref().child(`produtos/${Date.now()}_${file.name}`);
+        const uploadResult = await ref.put(file);
+        imageUrl = await uploadResult.ref.getDownloadURL();
       }
-      window.__editingProductId = null;
-    } else {
-      const newId = (window.PRODUCTS.reduce((max, p) => Math.max(max, p.id), 0) + 1) || 1;
-      const newProduct = {
-        id: newId,
-        title,
-        price,
-        image: imageData,
-        description: desc,
-        badge: '',
-        category,
-        sizes,
-        available: true
-      };
-      window.PRODUCTS.push(newProduct);
+
+      if (window.__editingProductId) {
+        const prodId = window.__editingProductId;
+        // Fetch existing product to preserve fields like image if not updated
+        const docRef = window.db.collection('produtos').doc(String(prodId));
+        const doc = await docRef.get();
+        const existingData = doc.exists ? doc.data() : {};
+        
+        const updatedProduct = {
+          id: prodId,
+          title,
+          price,
+          description: desc,
+          category,
+          sizes,
+          image: imageUrl || existingData.image || '',
+          badge: existingData.badge || '',
+          available: existingData.available !== false
+        };
+
+        await docRef.set(updatedProduct);
+        window.__editingProductId = null;
+      } else {
+        if (!file) {
+          alert('Por favor, selecione uma imagem para o novo produto.');
+          submitBtn.disabled = false;
+          submitBtn.textContent = originalBtnText;
+          return;
+        }
+        await loadProductsFromFirebase();
+        const newId = (window.PRODUCTS.reduce((max, p) => Math.max(max, p.id), 0) + 1) || 1;
+        const newProduct = {
+          id: newId,
+          title,
+          price,
+          image: imageUrl,
+          description: desc,
+          badge: '',
+          category,
+          sizes,
+          available: true
+        };
+        await window.db.collection('produtos').doc(String(newId)).set(newProduct);
+      }
+
+      await loadProducts();
+      alert('Produto saved com sucesso!');
+      form.reset();
+      if (fileInput) fileInput.required = true;
+      if (imagePreview) imagePreview.classList.add('hidden');
+      
+      // Reset submit button text
+      submitBtn.textContent = 'Adicionar Produto';
+    } catch (err) {
+      console.error(err);
+      alert('Erro ao salvar o produto: ' + err.message);
+    } finally {
+      submitBtn.disabled = false;
     }
-    // Persist
-    localStorage.setItem(STORAGE_KEY, JSON.stringify(window.PRODUCTS));
-    // Refresh UI
-    if (typeof renderProducts === 'function') {
-      renderProducts(document.querySelector('.filter-btn.active')?.id?.replace('filter-', '') || 'all');
-    }
-    loadProducts();
-    alert('Produto salvo com sucesso!');
-    form.reset();
-    if (imagePreview) imagePreview.classList.add('hidden');
-    // Reset submit button text
-    const submitBtn = form.querySelector('button[type="submit"]');
-    if (submitBtn) submitBtn.textContent = 'Adicionar Produto';
   };
 
   // Image preview for file input (both contexts)
