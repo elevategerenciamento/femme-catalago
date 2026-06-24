@@ -295,7 +295,7 @@
       <a class="text-on-surface-variant hover:text-secondary transition-colors duration-200 font-label-sm text-label-sm uppercase tracking-widest" href="#">Instagram</a>
       <a class="text-on-surface-variant hover:text-secondary transition-colors duration-200 font-label-sm text-label-sm uppercase tracking-widest" href="#">WhatsApp</a>
     </div>
-    <a id="admin-access-link" href="#" class="font-subheading text-subheading text-on-background hover:text-secondary transition-colors" title="Admin Access">Admin</a>
+    <a id="admin-access-link" href="javascript:void(0)" class="font-subheading text-subheading text-on-background hover:text-secondary transition-colors" title="Admin Access">Admin</a>
   </div>
 </footer>
   <!-- Admin Modal -->
@@ -324,7 +324,6 @@
     </div>
   </div>
 </div>
-  <script src="admin.js"></script>
 
 <!-- ══════════════════ CART DRAWER ══════════════════ -->
 <div id="cart-scrim"></div>
@@ -785,6 +784,121 @@ document.getElementById('qv-add-btn').addEventListener('click', function() {
 // ── INIT ──────────────────────────────────────────────
 renderProducts();
 renderCart();
+
+// ── ADMIN MODAL ───────────────────────────────────────
+const _adminLink = document.getElementById('admin-access-link');
+const _adminScrim = document.getElementById('admin-scrim');
+const _adminModal = document.getElementById('admin-modal');
+const _adminCloseBtn = document.getElementById('admin-close-btn');
+const _adminLoginDiv = document.getElementById('admin-login');
+const _adminPanelDiv = document.getElementById('admin-panel');
+const _adminPassInput = document.getElementById('admin-pass');
+const _adminLoginBtn = document.getElementById('admin-login-btn');
+const _adminLogoutBtn = document.getElementById('admin-logout');
+const _adminForm = document.getElementById('product-form');
+const _adminImagePreview = document.getElementById('image-preview');
+const ADMIN_PASSWORD = '12345';
+const ADMIN_STORAGE_KEY = 'femme_products';
+
+function openAdminModal() {
+  _adminScrim.classList.remove('hidden');
+  _adminModal.classList.remove('hidden');
+  document.body.style.overflow = 'hidden';
+}
+function closeAdminModal() {
+  _adminScrim.classList.add('hidden');
+  _adminModal.classList.add('hidden');
+  document.body.style.overflow = '';
+  _adminLoginDiv.classList.remove('hidden');
+  _adminPanelDiv.classList.add('hidden');
+  _adminPassInput.value = '';
+  _adminForm.reset();
+  _adminImagePreview.classList.add('hidden');
+  window.__editingProductId = null;
+}
+
+_adminLink.addEventListener('click', function(e) {
+  e.preventDefault();
+  openAdminModal();
+});
+_adminScrim.addEventListener('click', closeAdminModal);
+_adminCloseBtn.addEventListener('click', closeAdminModal);
+
+_adminLoginBtn.addEventListener('click', function() {
+  if (_adminPassInput.value.trim() === ADMIN_PASSWORD) {
+    _adminLoginDiv.classList.add('hidden');
+    _adminPanelDiv.classList.remove('hidden');
+  } else {
+    alert('Senha incorreta');
+  }
+});
+
+_adminLogoutBtn.addEventListener('click', function() {
+  _adminPanelDiv.classList.add('hidden');
+  _adminLoginDiv.classList.remove('hidden');
+  _adminPassInput.value = '';
+});
+
+_adminForm.addEventListener('submit', async function(e) {
+  e.preventDefault();
+  const title = document.getElementById('prod-title').value.trim();
+  const price = parseFloat(document.getElementById('prod-price').value);
+  const desc = document.getElementById('prod-desc').value.trim();
+  const category = document.getElementById('prod-category').value.trim();
+  const sizesRaw = document.getElementById('prod-sizes').value.trim();
+  const sizes = sizesRaw.split(',').map(s => s.trim()).filter(Boolean);
+  const fileInput = document.getElementById('prod-image');
+  const file = fileInput.files[0];
+  const imageData = await new Promise(resolve => {
+    if (!file) { resolve(''); return; }
+    const reader = new FileReader();
+    reader.onload = () => resolve(reader.result);
+    reader.readAsDataURL(file);
+  });
+
+  // Load existing products from storage
+  let storedProds = JSON.parse(localStorage.getItem(ADMIN_STORAGE_KEY) || '[]');
+
+  if (window.__editingProductId) {
+    const prod = storedProds.find(p => p.id === window.__editingProductId);
+    if (prod) {
+      prod.title = title; prod.price = price; prod.description = desc;
+      prod.category = category; prod.sizes = sizes;
+      if (imageData) prod.image = imageData;
+    }
+    window.__editingProductId = null;
+  } else {
+    const newId = (storedProds.reduce((max, p) => Math.max(max, p.id), 0) + 1) || Date.now();
+    storedProds.push({ id: newId, title, price, image: imageData, description: desc, badge: '', category, sizes, available: true });
+  }
+
+  localStorage.setItem(ADMIN_STORAGE_KEY, JSON.stringify(storedProds));
+  // Reload PRODUCTS and re-render
+  PRODUCTS.length = 0;
+  storedProds.forEach(p => PRODUCTS.push(p));
+  renderProducts('all');
+  alert('Produto salvo com sucesso!');
+  _adminForm.reset();
+  _adminImagePreview.classList.add('hidden');
+});
+
+document.getElementById('prod-image').addEventListener('change', function() {
+  const file = this.files[0];
+  if (!file) { _adminImagePreview.classList.add('hidden'); return; }
+  const reader = new FileReader();
+  reader.onload = () => { _adminImagePreview.src = reader.result; _adminImagePreview.classList.remove('hidden'); };
+  reader.readAsDataURL(file);
+});
+
+// Carregar produtos extras do storage ao iniciar
+(function() {
+  const storedProds = JSON.parse(localStorage.getItem(ADMIN_STORAGE_KEY) || '[]');
+  if (storedProds.length > 0) {
+    PRODUCTS.length = 0;
+    storedProds.forEach(p => PRODUCTS.push(p));
+    renderProducts('all');
+  }
+})();
 </script>
 
 </body>

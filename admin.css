@@ -1,0 +1,27 @@
+/* admin.css – Estilos para o painel admin standalone */
+
+body {
+  font-family: 'Montserrat', 'Inter', sans-serif;
+  min-height: 100vh;
+}
+
+/* Scrollbar */
+::-webkit-scrollbar { width: 6px; }
+::-webkit-scrollbar-track { background: #121414; }
+::-webkit-scrollbar-thumb { background: #4c4546; border-radius: 3px; }
+::-webkit-scrollbar-thumb:hover { background: #988e90; }
+
+/* Admin card */
+.admin-card {
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+.admin-card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 24px rgba(0,0,0,0.4);
+}
+
+/* Form inputs */
+input, textarea, select {
+  outline: none;
+  transition: ring 0.2s ease;
+}
