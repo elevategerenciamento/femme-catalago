@@ -59,6 +59,44 @@
     });
   }
 
+  // ---------- Image Compression Helper ----------
+  const compressImage = (file, maxWidth = 800, maxHeight = 800, quality = 0.7) => {
+    return new Promise((resolve, reject) => {
+      const reader = new FileReader();
+      reader.readAsDataURL(file);
+      reader.onload = (event) => {
+        const img = new Image();
+        img.src = event.target.result;
+        img.onload = () => {
+          const canvas = document.createElement('canvas');
+          let width = img.width;
+          let height = img.height;
+
+          if (width > height) {
+            if (width > maxWidth) {
+              height = Math.round((height * maxWidth) / width);
+              width = maxWidth;
+            }
+          } else {
+            if (height > maxHeight) {
+              width = Math.round((width * maxHeight) / height);
+              height = maxHeight;
+            }
+          }
+
+          canvas.width = width;
+          canvas.height = height;
+          const ctx = canvas.getContext('2d');
+          ctx.drawImage(img, 0, 0, width, height);
+          const dataUrl = canvas.toDataURL('image/jpeg', quality);
+          resolve(dataUrl);
+        };
+        img.onerror = (err) => reject(err);
+      };
+      reader.onerror = (err) => reject(err);
+    });
+  };
+
   // ---------- Functions ----------
   const openModal = () => {
     if (scrim && modal) {
@@ -210,15 +248,11 @@
     try {
       let imageUrl = '';
       if (file) {
-        // Upload to Firebase Storage
-        const ref = window.storage.ref().child(`produtos/${Date.now()}_${file.name}`);
-        const uploadResult = await ref.put(file);
-        imageUrl = await uploadResult.ref.getDownloadURL();
+        imageUrl = await compressImage(file);
       }
 
       if (window.__editingProductId) {
         const prodId = window.__editingProductId;
-        // Fetch existing product to preserve fields like image if not updated
         const docRef = window.db.collection('produtos').doc(String(prodId));
         const doc = await docRef.get();
         const existingData = doc.exists ? doc.data() : {};
@@ -267,7 +301,6 @@
       if (fileInput) fileInput.required = true;
       if (imagePreview) imagePreview.classList.add('hidden');
       
-      // Reset submit button text
       submitBtn.textContent = 'Adicionar Produto';
     } catch (err) {
       console.error(err);
@@ -297,7 +330,6 @@
   if (loginBtn) loginBtn.addEventListener('click', handleLogin);
   if (logoutBtn) logoutBtn.addEventListener('click', () => {
     if (isAdminPage) {
-      // On admin page simply hide panel and show login again
       const panel = document.getElementById('admin-panel');
       const login = document.getElementById('admin-login');
       if (panel) panel.classList.add('hidden');
@@ -305,7 +337,6 @@
       passInput.value = '';
       window.__editingProductId = null;
     } else {
-      // Modal context
       if (panelDiv) panelDiv.classList.add('hidden');
       if (loginDiv) loginDiv.classList.remove('hidden');
       passInput.value = '';
@@ -321,7 +352,6 @@
 
   // Initialize admin page if present
   if (isAdminPage) {
-    // Ensure login view is visible
     const loginSection = document.getElementById('admin-login');
     const panelSection = document.getElementById('admin-panel');
     if (loginSection) loginSection.classList.remove('hidden');
