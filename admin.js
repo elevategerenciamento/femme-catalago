@@ -22,6 +22,43 @@
   const panelDiv = document.getElementById('admin-panel');
   const closeBtn = document.getElementById('admin-close-btn');
 
+  // ---------- Size Selector Helpers ----------
+  const sizesSelector = document.getElementById('sizes-selector');
+  const prodSizesInput = document.getElementById('prod-sizes');
+
+  const updateSizesInput = () => {
+    if (!sizesSelector || !prodSizesInput) return;
+    const selected = [];
+    sizesSelector.querySelectorAll('.size-btn.active').forEach(btn => {
+      selected.push(btn.dataset.size);
+    });
+    prodSizesInput.value = selected.join(', ');
+  };
+
+  const syncSizesUI = () => {
+    if (!sizesSelector || !prodSizesInput) return;
+    const selectedSizes = prodSizesInput.value.split(',').map(s => s.trim()).filter(Boolean);
+    sizesSelector.querySelectorAll('.size-btn').forEach(btn => {
+      if (selectedSizes.includes(btn.dataset.size)) {
+        btn.classList.add('bg-secondary', 'text-black', 'border-secondary', 'active');
+      } else {
+        btn.classList.remove('bg-secondary', 'text-black', 'border-secondary', 'active');
+      }
+    });
+  };
+
+  if (sizesSelector) {
+    sizesSelector.querySelectorAll('.size-btn').forEach(btn => {
+      btn.addEventListener('click', () => {
+        btn.classList.toggle('bg-secondary');
+        btn.classList.toggle('text-black');
+        btn.classList.toggle('border-secondary');
+        btn.classList.toggle('active');
+        updateSizesInput();
+      });
+    });
+  }
+
   // ---------- Functions ----------
   const openModal = () => {
     if (scrim && modal) {
@@ -43,6 +80,7 @@
       form.reset();
       const fileInput = document.getElementById('prod-image');
       if (fileInput) fileInput.required = true;
+      syncSizesUI();
     }
     if (imagePreview) imagePreview.classList.add('hidden');
     window.__editingProductId = null;
@@ -117,6 +155,7 @@
     document.getElementById('prod-desc').value = prod.description;
     document.getElementById('prod-category').value = prod.category;
     document.getElementById('prod-sizes').value = prod.sizes.join(', ');
+    syncSizesUI();
     // Image preview (if exists)
     if (prod.image && imagePreview) {
       imagePreview.src = prod.image;
@@ -160,6 +199,13 @@
     const sizes = sizesRaw.split(',').map(s => s.trim()).filter(Boolean);
     const fileInput = document.getElementById('prod-image');
     const file = fileInput.files[0];
+
+    if (sizes.length === 0) {
+      alert('Por favor, selecione pelo menos um tamanho.');
+      submitBtn.disabled = false;
+      submitBtn.textContent = originalBtnText;
+      return;
+    }
 
     try {
       let imageUrl = '';
@@ -215,8 +261,9 @@
       }
 
       await loadProducts();
-      alert('Produto saved com sucesso!');
+      alert('Produto salvo com sucesso!');
       form.reset();
+      syncSizesUI();
       if (fileInput) fileInput.required = true;
       if (imagePreview) imagePreview.classList.add('hidden');
       

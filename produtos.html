@@ -820,9 +820,25 @@
                 <option value="especiais">Especiais</option>
               </select>
             </div>
+            <style>
+              .size-btn-group .size-btn.active {
+                background: #f7b6bb !important;
+                color: #121414 !important;
+                border-color: #f7b6bb !important;
+              }
+              .size-btn-group .size-btn:hover {
+                border-color: #f7b6bb !important;
+              }
+            </style>
             <div class="admin-field">
-              <label>Tamanhos * <span style="color:#4c4546;font-size:10px">(separados por vírgula)</span></label>
-              <input type="text" id="prod-sizes" placeholder="P, M, G, GG" required />
+              <label>Tamanhos *</label>
+              <div class="size-btn-group" id="sizes-selector" style="display:flex;gap:8px;margin-top:6px">
+                <button type="button" class="size-btn" data-size="P" style="border:1px solid #4c4546;background:transparent;color:#e3e2e2;border-radius:4px;width:40px;height:40px;display:flex;align-items:center;justify-content:center;font-family:Montserrat,sans-serif;font-weight:500;cursor:pointer;transition:all 0.3s">P</button>
+                <button type="button" class="size-btn" data-size="M" style="border:1px solid #4c4546;background:transparent;color:#e3e2e2;border-radius:4px;width:40px;height:40px;display:flex;align-items:center;justify-content:center;font-family:Montserrat,sans-serif;font-weight:500;cursor:pointer;transition:all 0.3s">M</button>
+                <button type="button" class="size-btn" data-size="G" style="border:1px solid #4c4546;background:transparent;color:#e3e2e2;border-radius:4px;width:40px;height:40px;display:flex;align-items:center;justify-content:center;font-family:Montserrat,sans-serif;font-weight:500;cursor:pointer;transition:all 0.3s">G</button>
+                <button type="button" class="size-btn" data-size="GG" style="border:1px solid #4c4546;background:transparent;color:#e3e2e2;border-radius:4px;width:40px;height:40px;display:flex;align-items:center;justify-content:center;font-family:Montserrat,sans-serif;font-weight:500;cursor:pointer;transition:all 0.3s">GG</button>
+              </div>
+              <input type="hidden" id="prod-sizes" required />
             </div>
             <div class="admin-field">
               <label>Etiqueta / Badge</label>
@@ -1565,6 +1581,7 @@ window.adminEditProduct = async function(id) {
     document.getElementById('prod-desc').value = p.description || '';
     document.getElementById('prod-category').value = p.category || '';
     document.getElementById('prod-sizes').value = (p.sizes||[]).join(', ');
+    syncSizesUI();
     document.getElementById('prod-badge').value = p.badge || '';
     if (p.image) {
       const prev = document.getElementById('admin-img-preview');
@@ -1585,7 +1602,42 @@ window.resetAdminForm = function() {
   document.getElementById('admin-img-preview').src = '';
   document.getElementById('form-section-title').textContent = 'Novo Produto';
   document.getElementById('form-submit-btn').textContent = 'Salvar Produto';
+  syncSizesUI();
 };
+
+// Seletor de Tamanhos
+function updateSizesInput() {
+  const selector = document.getElementById('sizes-selector');
+  const input = document.getElementById('prod-sizes');
+  if (!selector || !input) return;
+  const selected = [];
+  selector.querySelectorAll('.size-btn.active').forEach(btn => {
+    selected.push(btn.dataset.size);
+  });
+  input.value = selected.join(', ');
+}
+
+function syncSizesUI() {
+  const selector = document.getElementById('sizes-selector');
+  const input = document.getElementById('prod-sizes');
+  if (!selector || !input) return;
+  const selectedSizes = input.value.split(',').map(s => s.trim()).filter(Boolean);
+  selector.querySelectorAll('.size-btn').forEach(btn => {
+    if (selectedSizes.includes(btn.dataset.size)) {
+      btn.classList.add('active');
+    } else {
+      btn.classList.remove('active');
+    }
+  });
+}
+
+// Registrar click nos botões de tamanho
+document.querySelectorAll('#sizes-selector .size-btn').forEach(btn => {
+  btn.addEventListener('click', () => {
+    btn.classList.toggle('active');
+    updateSizesInput();
+  });
+});
 
 window.handleAdminFormSubmit = async function(e) {
   e.preventDefault();
@@ -1601,6 +1653,13 @@ window.handleAdminFormSubmit = async function(e) {
   const sizes = document.getElementById('prod-sizes').value.split(',').map(s=>s.trim()).filter(Boolean);
   const badge = document.getElementById('prod-badge').value.trim();
   const file = document.getElementById('prod-image').files[0];
+
+  if (sizes.length === 0) {
+    alert('Por favor, selecione pelo menos um tamanho.');
+    submitBtn.disabled = false;
+    submitBtn.textContent = originalBtnText;
+    return;
+  }
 
   try {
     let imageUrl = '';

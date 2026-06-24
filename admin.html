@@ -68,7 +68,16 @@
         <img id="image-preview" class="hidden w-32 h-32 object-cover rounded" alt="Preview" />
         <textarea id="prod-desc" placeholder="Descrição" class="w-full p-2 rounded bg-gray-800 text-white placeholder-gray-400 focus:outline-none" required></textarea>
         <input type="text" id="prod-category" placeholder="Categoria" class="w-full p-2 rounded bg-gray-800 text-white placeholder-gray-400 focus:outline-none" required />
-        <input type="text" id="prod-sizes" placeholder="Tamanhos (separados por vírgula)" class="w-full p-2 rounded bg-gray-800 text-white placeholder-gray-400 focus:outline-none" required />
+        <div class="w-full">
+          <label class="block text-gray-400 text-xs mb-1">Tamanhos Disponíveis</label>
+          <div class="flex gap-2" id="sizes-selector">
+            <button type="button" class="size-btn border border-gray-600 rounded w-10 h-10 flex items-center justify-center text-white hover:bg-secondary hover:text-black hover:border-secondary transition-colors" data-size="P">P</button>
+            <button type="button" class="size-btn border border-gray-600 rounded w-10 h-10 flex items-center justify-center text-white hover:bg-secondary hover:text-black hover:border-secondary transition-colors" data-size="M">M</button>
+            <button type="button" class="size-btn border border-gray-600 rounded w-10 h-10 flex items-center justify-center text-white hover:bg-secondary hover:text-black hover:border-secondary transition-colors" data-size="G">G</button>
+            <button type="button" class="size-btn border border-gray-600 rounded w-10 h-10 flex items-center justify-center text-white hover:bg-secondary hover:text-black hover:border-secondary transition-colors" data-size="GG">GG</button>
+          </div>
+          <input type="hidden" id="prod-sizes" required />
+        </div>
         <button type="submit" class="col-span-2 w-full bg-secondary text-white py-2 rounded hover:bg-secondary/80 transition-colors">Adicionar Produto</button>
       </form>
 
