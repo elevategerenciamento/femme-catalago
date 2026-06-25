@@ -206,66 +206,50 @@
     .qty-ctrl button { width:28px; height:28px; border:1px solid #4c4546; font-size:14px; color:#cfc4c5; transition: all 0.2s; }
     .qty-ctrl button:hover { border-color:#e3e2e2; color:#e3e2e2; }
 
-    /* ── Magazine Banner Background Effect ── */
+    /* ── Magazine Banner Frame Editorial ── */
     .magazine-banner-wrapper {
         position: relative;
         display: flex;
         flex-direction: column;
+        /* Mat escuro — fundo ligeiramente mais claro que o bg, cria profundidade */
+        background: #1c1e1e;
+        padding: 10px;
+        /* Borda fina em rosa — clean e elegante */
+        outline: 1px solid rgba(247, 182, 187, 0.25);
+        outline-offset: 6px;
     }
-    /* Glow real por trás — visível no mobile */
-    .magazine-banner-glow {
-        position: absolute;
-        inset: -32px -28px;
-        background: radial-gradient(
-            ellipse 80% 70% at 50% 50%,
-            rgba(247, 182, 187, 0.18) 0%,
-            rgba(247, 182, 187, 0.07) 40%,
-            transparent 70%
-        );
-        pointer-events: none;
-        z-index: 0;
-        border-radius: 50%;
-    }
-    /* Linhas decorativas nos cantos */
+    /* Os 4 cantos decorativos — visíveis e nítidos */
     .magazine-banner-corners {
         position: absolute;
-        inset: -6px;
+        inset: -12px;
         pointer-events: none;
-        z-index: 0;
+        z-index: 2;
     }
-    .magazine-banner-corners::before,
-    .magazine-banner-corners::after {
-        content: '';
+    .magazine-banner-corners span {
         position: absolute;
-        width: 20px;
-        height: 20px;
-        border-color: rgba(247, 182, 187, 0.35);
+        width: 14px;
+        height: 14px;
+        border-color: rgba(247, 182, 187, 0.7);
         border-style: solid;
+        display: block;
     }
-    .magazine-banner-corners::before {
-        top: 0; left: 0;
-        border-width: 1.5px 0 0 1.5px;
-    }
-    .magazine-banner-corners::after {
-        bottom: 0; right: 0;
-        border-width: 0 1.5px 1.5px 0;
-    }
+    .magazine-banner-corners span:nth-child(1) { top: 0; left: 0; border-width: 1.5px 0 0 1.5px; }
+    .magazine-banner-corners span:nth-child(2) { top: 0; right: 0; border-width: 1.5px 1.5px 0 0; }
+    .magazine-banner-corners span:nth-child(3) { bottom: 0; left: 0; border-width: 0 0 1.5px 1.5px; }
+    .magazine-banner-corners span:nth-child(4) { bottom: 0; right: 0; border-width: 0 1.5px 1.5px 0; }
+    /* O glow div não usa mais nada — escondido */
+    .magazine-banner-glow { display: none; }
     .magazine-banner {
         position: relative;
         z-index: 1;
-        box-shadow:
-            0 8px 40px rgba(0, 0, 0, 0.65),
-            0 2px 10px rgba(0, 0, 0, 0.4),
-            0 0 0 1px rgba(247, 182, 187, 0.08);
     }
     @media (min-width: 1024px) {
-        .magazine-banner-glow,
-        .magazine-banner-corners { display: none; }
-        .magazine-banner {
-            box-shadow:
-                0 4px 30px rgba(0, 0, 0, 0.5),
-                0 1px 6px rgba(0, 0, 0, 0.3);
+        .magazine-banner-wrapper {
+            padding: 0;
+            background: transparent;
+            outline: none;
         }
+        .magazine-banner-corners { display: none; }
     }
 </style>
 </head>
@@ -641,7 +625,12 @@ async function loadDynamicFeatured() {
     bannerContainer.innerHTML = `
       <div class="magazine-banner-wrapper flex-1 flex flex-col">
         <div class="magazine-banner-glow"></div>
-        <div class="magazine-banner-corners"></div>
+        <div class="magazine-banner-corners">
+          <span></span>
+          <span></span>
+          <span></span>
+          <span></span>
+        </div>
         <div class="magazine-banner relative w-full aspect-[2/3] lg:aspect-auto lg:flex-1 overflow-hidden bg-surface-container-low border border-outline-variant/10 cursor-pointer" onclick="openQV(0)">
           <div class="absolute inset-0 bg-cover bg-center" style="background-image: url('${mainProd.image}')"></div>
         </div>
