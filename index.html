@@ -518,7 +518,7 @@ let cart = JSON.parse(localStorage.getItem('femme_cart') || '[]');
 let qvSelectedSize = null;
 let qvProductIdx = null;
 
-// ── RENDER DYNAMIC FEATURED (1 MAGAZINE BANNER + 3 CARDS) ──
+// ── RENDER DYNAMIC FEATURED (1 MAGAZINE BANNER + 4 CARDS) ──
 async function loadDynamicFeatured() {
   const bannerContainer = document.getElementById('magazine-banner-container');
   const gridContainer = document.getElementById('secondary-featured-grid');
@@ -526,11 +526,13 @@ async function loadDynamicFeatured() {
   try {
     // 1. Obter os IDs salvos no Firestore
     const configDoc = await window.db.collection('config').doc('home').get();
-    let featuredIds = [1, 2, 3, 4]; // Fallback default IDs
+    let featuredIds = [1, 2, 3, 4, 5]; // Fallback default IDs (5 items)
     if (configDoc.exists) {
       const data = configDoc.data();
-      if (data.featured_ids && data.featured_ids.length === 4) {
+      if (data.featured_ids && data.featured_ids.length === 5) {
         featuredIds = data.featured_ids;
+      } else if (data.featured_ids && data.featured_ids.length === 4) {
+        featuredIds = [...data.featured_ids, 1]; // Adiciona um fallback se for antigo
       }
     }
 
@@ -546,17 +548,17 @@ async function loadDynamicFeatured() {
     featuredIds.forEach(id => {
       const p = dbProducts.find(x => x.id === id);
       if (p) {
-        // Mapeia o campo description para desc para manter compatibilidade
         p.desc = p.description || p.desc;
         featuredProducts.push(p);
       }
     });
 
     // Se não encontrou do Firebase, usa os defaults locais
-    if (featuredProducts.length < 4) {
+    if (featuredProducts.length < 5) {
       featuredProducts.length = 0;
+      // Adiciona o produto 1 como banner e os outros 4 adicionais
       featuredIds.forEach((id, index) => {
-        const fallbackProd = PRODUCTS[index];
+        const fallbackProd = PRODUCTS[index] || PRODUCTS[0];
         if (fallbackProd) featuredProducts.push(fallbackProd);
       });
     }
@@ -565,40 +567,19 @@ async function loadDynamicFeatured() {
     PRODUCTS.length = 0;
     featuredProducts.forEach(p => PRODUCTS.push(p));
 
-    // 3. Renderizar o Destaque 1 (Banner Revista)
+    // 3. Renderizar o Destaque 1 (Banner Revista - Apenas Imagem)
     const mainProd = featuredProducts[0];
-    const mainBadgeHTML = mainProd.badge 
-      ? `<span class="bg-secondary text-background font-label-sm text-[9px] md:text-label-sm px-2.5 py-0.5 md:px-3.5 md:py-1 uppercase tracking-wider rounded-none mb-3 inline-block">${mainProd.badge}</span>`
-      : '';
     
     bannerContainer.innerHTML = `
-      <div class="magazine-banner group relative w-full h-[450px] md:h-[600px] overflow-hidden bg-surface-container-low border border-outline-variant/10">
+      <div class="magazine-banner group relative w-full h-[450px] md:h-[600px] overflow-hidden bg-surface-container-low border border-outline-variant/10 cursor-pointer" onclick="openQV(0)">
         <div class="absolute inset-0 bg-cover bg-center transition-transform duration-1000 group-hover:scale-105" style="background-image: url('${mainProd.image}')"></div>
-        <div class="absolute inset-0 bg-gradient-to-t from-black/80 via-black/35 to-transparent"></div>
-        
-        <!-- Magazine Styling Overlay -->
-        <div class="absolute inset-x-6 top-6 flex justify-between items-start pointer-events-none">
-          <span class="text-[9px] tracking-[0.2em] text-white/50 uppercase font-sans">Issue No. 12</span>
-          <span class="text-[9px] tracking-[0.2em] text-white/50 uppercase font-sans">Dezembro 2026</span>
-        </div>
-
-        <div class="absolute inset-x-0 bottom-0 p-6 md:p-8 flex flex-col items-center text-center">
-          ${mainBadgeHTML}
-          <h3 class="font-display text-[26px] md:text-[38px] text-white leading-tight uppercase tracking-wider font-light mb-2">${mainProd.title}</h3>
-          <p class="text-[12px] md:text-[14px] text-white/70 max-w-[85%] font-light line-clamp-2 mb-4 hidden sm:block">${mainProd.desc || ''}</p>
-          <div class="flex items-center gap-4">
-            <span class="text-secondary font-medium text-lg font-sans">R$ ${mainProd.price.toFixed(2).replace('.', ',')}</span>
-            <button onclick="openQV(0)" class="border border-white text-white px-5 py-2 font-subheading text-[10px] uppercase tracking-wider hover:bg-white hover:text-black transition-colors rounded-none">
-              Ver Detalhes
-            </button>
-          </div>
-        </div>
       </div>
     `;
 
-    // 4. Renderizar os Destaques 2, 3 e 4 (Cards normais)
+    // 4. Renderizar os Destaques 2, 3, 4 e 5 (Cards normais - Grid 2 colunas e 2 linhas)
+    gridContainer.className = "grid grid-cols-2 gap-3 md:gap-gutter";
     gridContainer.innerHTML = '';
-    for (let i = 1; i < 4; i++) {
+    for (let i = 1; i < 5; i++) {
       const p = featuredProducts[i];
       if (!p) continue;
       

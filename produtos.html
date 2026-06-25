@@ -805,7 +805,7 @@
         </div>
         <div style="background:rgba(30,32,32,0.4);border:1px solid rgba(255,255,255,0.05);border-radius:14px;padding:24px" class="space-y-6">
           <p style="font-size:12px;color:#988e90;font-family:Montserrat,sans-serif;margin-bottom:20px">
-            Selecione quais produtos serão exibidos na seção de Destaques na Home. O <strong>Destaque 1</strong> será exibido como o banner principal grande (estilo capa de revista), enquanto os destaques 2, 3 e 4 serão exibidos como cards tradicionais.
+            Selecione quais produtos serão exibidos na seção de Destaques na Home. O <strong>Destaque 1</strong> será exibido como o banner principal grande (estilo capa de revista, sem textos e valores por cima), enquanto os destaques 2, 3, 4 e 5 serão exibidos como cards tradicionais ao lado em um grid de 2 colunas e 2 linhas.
           </p>
           <form id="featured-config-form" onsubmit="handleSaveFeatured(event)" style="display:flex;flex-direction:column;gap:18px">
             <div class="admin-field">
@@ -829,6 +829,12 @@
             <div class="admin-field">
               <label>Destaque 4 (Card de Produto) *</label>
               <select id="feat-select-4" required style="width:100%;padding:10px;background:#1e2020;border:1px solid #4c4546;color:#e3e2e2;border-radius:8px">
+                <option value="">Carregando produtos...</option>
+              </select>
+            </div>
+            <div class="admin-field">
+              <label>Destaque 5 (Card de Produto) *</label>
+              <select id="feat-select-5" required style="width:100%;padding:10px;background:#1e2020;border:1px solid #4c4546;color:#e3e2e2;border-radius:8px">
                 <option value="">Carregando produtos...</option>
               </select>
             </div>
@@ -1515,7 +1521,8 @@ async function adminLoadFeaturedSettings() {
     document.getElementById('feat-select-1'),
     document.getElementById('feat-select-2'),
     document.getElementById('feat-select-3'),
-    document.getElementById('feat-select-4')
+    document.getElementById('feat-select-4'),
+    document.getElementById('feat-select-5')
   ];
   
   selects.forEach(select => {
@@ -1574,7 +1581,8 @@ window.handleSaveFeatured = async function(e) {
     parseInt(document.getElementById('feat-select-1').value),
     parseInt(document.getElementById('feat-select-2').value),
     parseInt(document.getElementById('feat-select-3').value),
-    parseInt(document.getElementById('feat-select-4').value)
+    parseInt(document.getElementById('feat-select-4').value),
+    parseInt(document.getElementById('feat-select-5').value)
   ];
 
   if (ids.some(isNaN)) {
