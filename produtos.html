@@ -838,6 +838,18 @@
                 <option value="">Carregando produtos...</option>
               </select>
             </div>
+            <div class="admin-field">
+              <label>Destaque 6 (Card de Produto) *</label>
+              <select id="feat-select-6" required style="width:100%;padding:10px;background:#1e2020;border:1px solid #4c4546;color:#e3e2e2;border-radius:8px">
+                <option value="">Carregando produtos...</option>
+              </select>
+            </div>
+            <div class="admin-field">
+              <label>Destaque 7 (Card de Produto) *</label>
+              <select id="feat-select-7" required style="width:100%;padding:10px;background:#1e2020;border:1px solid #4c4546;color:#e3e2e2;border-radius:8px">
+                <option value="">Carregando produtos...</option>
+              </select>
+            </div>
             <button type="submit" class="admin-btn-primary" style="margin-top:12px;width:100%">Salvar Configurações de Destaque</button>
           </form>
         </div>
@@ -1522,7 +1534,9 @@ async function adminLoadFeaturedSettings() {
     document.getElementById('feat-select-2'),
     document.getElementById('feat-select-3'),
     document.getElementById('feat-select-4'),
-    document.getElementById('feat-select-5')
+    document.getElementById('feat-select-5'),
+    document.getElementById('feat-select-6'),
+    document.getElementById('feat-select-7')
   ];
   
   selects.forEach(select => {
@@ -1582,7 +1596,9 @@ window.handleSaveFeatured = async function(e) {
     parseInt(document.getElementById('feat-select-2').value),
     parseInt(document.getElementById('feat-select-3').value),
     parseInt(document.getElementById('feat-select-4').value),
-    parseInt(document.getElementById('feat-select-5').value)
+    parseInt(document.getElementById('feat-select-5').value),
+    parseInt(document.getElementById('feat-select-6').value),
+    parseInt(document.getElementById('feat-select-7').value)
   ];
 
   if (ids.some(isNaN)) {
