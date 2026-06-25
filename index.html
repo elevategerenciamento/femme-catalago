@@ -317,16 +317,16 @@
     </div>
     
     <!-- Dynamic Layout: Magazine Banner + Cards Grid (Professional Alignment) -->
-    <div class="flex flex-col lg:flex-row gap-6 md:gap-gutter items-stretch max-w-7xl mx-auto w-full">
-      <!-- Magazine Banner Area (Destaque 1) -->
-      <div id="magazine-banner-container" class="w-full lg:w-[38%] flex-shrink-0">
+    <div class="flex flex-col lg:flex-row gap-6 md:gap-gutter items-center max-w-7xl mx-auto w-full">
+      <!-- Magazine Banner Area (Destaque 1 - Squared 4:3 Aspect Ratio) -->
+      <div id="magazine-banner-container" class="w-full lg:w-[45%] flex-shrink-0">
         <!-- Populated dynamically or fallback -->
-        <div class="animate-pulse bg-surface-container-low w-full aspect-[4/3] lg:aspect-[2/3]"></div>
+        <div class="animate-pulse bg-surface-container-low w-full aspect-[4/3]"></div>
       </div>
       
       <!-- Secondary Cards Area (Destaque 2, 3, 4, 5 - Grid of 4 Small Cards) -->
-      <div class="w-full lg:flex-1 flex flex-col justify-between">
-        <div id="secondary-featured-grid" class="grid grid-cols-2 gap-3 md:gap-gutter">
+      <div class="w-full lg:flex-1">
+        <div id="secondary-featured-grid" class="grid grid-cols-2 gap-3 md:gap-gutter max-w-2xl mx-auto">
           <!-- Populated dynamically -->
           <div class="animate-pulse bg-surface-container-low aspect-[2/3] w-full"></div>
           <div class="animate-pulse bg-surface-container-low aspect-[2/3] w-full"></div>
@@ -572,7 +572,7 @@ async function loadDynamicFeatured() {
     const mainProd = featuredProducts[0];
     
     bannerContainer.innerHTML = `
-      <div class="magazine-banner group relative w-full aspect-[4/3] lg:aspect-[2/3] h-full overflow-hidden bg-surface-container-low border border-outline-variant/10 cursor-pointer" onclick="openQV(0)">
+      <div class="magazine-banner group relative w-full aspect-[4/3] h-full overflow-hidden bg-surface-container-low border border-outline-variant/10 cursor-pointer" onclick="openQV(0)">
         <div class="absolute inset-0 bg-cover bg-center transition-transform duration-1000 group-hover:scale-105" style="background-image: url('${mainProd.image}')"></div>
       </div>
     `;
