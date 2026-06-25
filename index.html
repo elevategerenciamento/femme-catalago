@@ -316,18 +316,19 @@
       <a class="font-subheading text-subheading text-secondary hover:text-on-background transition-colors uppercase tracking-widest hidden md:block" href="produtos.html">Ver Todos</a>
     </div>
     
-    <!-- Dynamic Layout: Magazine Banner + Cards Grid -->
-    <div class="flex flex-col lg:flex-row gap-6 md:gap-gutter">
-      <!-- Magazine Banner Area (Destaque 1) -->
-      <div id="magazine-banner-container" class="w-full lg:w-[45%] flex-shrink-0">
+    <!-- Dynamic Layout: Magazine Banner + Cards Grid (Perfectly Aligned Height) -->
+    <div class="flex flex-col lg:flex-row gap-6 md:gap-gutter items-stretch">
+      <!-- Magazine Banner Area (Destaque 1 - Vertical Banner) -->
+      <div id="magazine-banner-container" class="w-full lg:w-[42%] xl:w-[40%] flex flex-col justify-between">
         <!-- Populated dynamically or fallback -->
-        <div class="animate-pulse bg-surface-container-low h-[450px] md:h-[600px] w-full"></div>
+        <div class="animate-pulse bg-surface-container-low h-[450px] lg:h-full w-full min-h-[450px] lg:min-h-[550px]"></div>
       </div>
       
-      <!-- Secondary Cards Area (Destaque 2, 3, 4) -->
-      <div class="w-full lg:flex-1">
-        <div id="secondary-featured-grid" class="grid grid-cols-2 md:grid-cols-3 gap-3 md:gap-gutter">
+      <!-- Secondary Cards Area (Destaque 2, 3, 4, 5 - Grid of 4 Small Cards) -->
+      <div class="w-full lg:flex-1 flex flex-col">
+        <div id="secondary-featured-grid" class="grid grid-cols-2 gap-3 md:gap-gutter h-full">
           <!-- Populated dynamically -->
+          <div class="animate-pulse bg-surface-container-low aspect-[2/3] w-full"></div>
           <div class="animate-pulse bg-surface-container-low aspect-[2/3] w-full"></div>
           <div class="animate-pulse bg-surface-container-low aspect-[2/3] w-full"></div>
           <div class="animate-pulse bg-surface-container-low aspect-[2/3] w-full"></div>
@@ -571,7 +572,7 @@ async function loadDynamicFeatured() {
     const mainProd = featuredProducts[0];
     
     bannerContainer.innerHTML = `
-      <div class="magazine-banner group relative w-full h-[450px] md:h-[600px] overflow-hidden bg-surface-container-low border border-outline-variant/10 cursor-pointer" onclick="openQV(0)">
+      <div class="magazine-banner group relative w-full h-[450px] lg:h-full min-h-[450px] lg:min-h-[550px] overflow-hidden bg-surface-container-low border border-outline-variant/10 cursor-pointer" onclick="openQV(0)">
         <div class="absolute inset-0 bg-cover bg-center transition-transform duration-1000 group-hover:scale-105" style="background-image: url('${mainProd.image}')"></div>
       </div>
     `;
