@@ -317,16 +317,16 @@
     </div>
     
     <!-- Dynamic Layout: Magazine Banner + Cards Grid (Professional Alignment) -->
-    <div class="flex flex-col lg:flex-row gap-6 md:gap-gutter items-center max-w-7xl mx-auto w-full">
+    <div class="flex flex-col lg:flex-row gap-8 md:gap-12 items-start max-w-7xl mx-auto w-full">
       <!-- Magazine Banner Area (Destaque 1 - Squared 4:3 Aspect Ratio) -->
-      <div id="magazine-banner-container" class="w-full lg:w-[45%] flex-shrink-0">
+      <div id="magazine-banner-container" class="w-full lg:w-[42%] flex-shrink-0">
         <!-- Populated dynamically or fallback -->
         <div class="animate-pulse bg-surface-container-low w-full aspect-[4/3]"></div>
       </div>
       
       <!-- Secondary Cards Area (Destaque 2, 3, 4, 5 - Grid of 4 Small Cards) -->
-      <div class="w-full lg:flex-1">
-        <div id="secondary-featured-grid" class="grid grid-cols-2 gap-3 md:gap-gutter max-w-2xl mx-auto">
+      <div class="w-full lg:flex-1 lg:pl-4">
+        <div id="secondary-featured-grid" class="grid grid-cols-2 gap-x-4 gap-y-6 max-w-[580px] mr-auto">
           <!-- Populated dynamically -->
           <div class="animate-pulse bg-surface-container-low aspect-[2/3] w-full"></div>
           <div class="animate-pulse bg-surface-container-low aspect-[2/3] w-full"></div>
@@ -578,7 +578,7 @@ async function loadDynamicFeatured() {
     `;
 
     // 4. Renderizar os Destaques 2, 3, 4 e 5 (Cards normais - Grid 2 colunas e 2 linhas)
-    gridContainer.className = "grid grid-cols-2 gap-3 md:gap-gutter";
+    gridContainer.className = "grid grid-cols-2 gap-x-4 gap-y-6 max-w-[580px] mr-auto lg:ml-4";
     gridContainer.innerHTML = '';
     for (let i = 1; i < 5; i++) {
       const p = featuredProducts[i];
