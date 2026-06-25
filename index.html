@@ -237,8 +237,20 @@
     .magazine-banner-corners span:nth-child(2) { top: 0; right: 0; border-width: 1.5px 1.5px 0 0; }
     .magazine-banner-corners span:nth-child(3) { bottom: 0; left: 0; border-width: 0 0 1.5px 1.5px; }
     .magazine-banner-corners span:nth-child(4) { bottom: 0; right: 0; border-width: 0 1.5px 1.5px 0; }
-    /* O glow div não usa mais nada — escondido */
-    .magazine-banner-glow { display: none; }
+    /* Brilho elíptico rosa suave de fundo, transbordando pelas laterais */
+    .magazine-banner-glow {
+        display: block;
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        width: 170%; /* bem largo para destacar as laterais */
+        height: 120%;
+        background: radial-gradient(ellipse at center, rgba(247, 182, 187, 0.16) 0%, rgba(247, 182, 187, 0.04) 50%, rgba(0, 0, 0, 0) 75%);
+        filter: blur(55px);
+        pointer-events: none;
+        z-index: -1; /* fica por trás de tudo */
+    }
     .magazine-banner {
         position: relative;
         z-index: 1;
