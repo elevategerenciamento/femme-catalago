@@ -1231,3 +1231,21 @@ button {
   transform: none;
   visibility: visible;
 }
+
+/* Magazine Banner Section */
+.magazine-banner {
+  transition: border-color var(--transition-smooth);
+}
+.magazine-banner::before {
+  content: '';
+  position: absolute;
+  inset: 16px;
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  pointer-events: none;
+  z-index: 5;
+  transition: border-color var(--transition-smooth);
+}
+.magazine-banner:hover::before {
+  border-color: rgba(247, 182, 187, 0.4);
+}
+

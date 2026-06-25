@@ -733,6 +733,10 @@
           <span class="material-symbols-outlined nav-icon">inventory_2</span>
           <span class="admin-nav-label">Produtos</span>
         </div>
+        <div class="admin-nav-item" data-target="sec-featured-config">
+          <span class="material-symbols-outlined nav-icon">star</span>
+          <span class="admin-nav-label">Destaques</span>
+        </div>
         <div class="admin-nav-item" data-target="sec-add">
           <span class="material-symbols-outlined nav-icon">add_circle</span>
           <span class="admin-nav-label">Cadastrar</span>
@@ -791,6 +795,45 @@
           <span class="material-symbols-outlined" style="font-size:48px;color:#4c4546;display:block;margin-bottom:12px">inventory_2</span>
           <p style="color:#4c4546;font-family:Montserrat,sans-serif;font-size:13px">Nenhum produto cadastrado ainda.</p>
           <button class="admin-btn-primary" onclick="adminNavTo('sec-add')" style="width:auto;padding:12px 24px;margin-top:20px">Cadastrar primeiro produto</button>
+        </div>
+      </section>
+
+      <!-- Featured Config Section -->
+      <section id="sec-featured-config" class="admin-section">
+        <div class="admin-topbar">
+          <h1 class="admin-page-title">Destaques da Home</h1>
+        </div>
+        <div style="background:rgba(30,32,32,0.4);border:1px solid rgba(255,255,255,0.05);border-radius:14px;padding:24px" class="space-y-6">
+          <p style="font-size:12px;color:#988e90;font-family:Montserrat,sans-serif;margin-bottom:20px">
+            Selecione quais produtos serão exibidos na seção de Destaques na Home. O <strong>Destaque 1</strong> será exibido como o banner principal grande (estilo capa de revista), enquanto os destaques 2, 3 e 4 serão exibidos como cards tradicionais.
+          </p>
+          <form id="featured-config-form" onsubmit="handleSaveFeatured(event)" style="display:flex;flex-direction:column;gap:18px">
+            <div class="admin-field">
+              <label>Destaque 1 (Banner Capa de Revista) *</label>
+              <select id="feat-select-1" required style="width:100%;padding:10px;background:#1e2020;border:1px solid #4c4546;color:#e3e2e2;border-radius:8px">
+                <option value="">Carregando produtos...</option>
+              </select>
+            </div>
+            <div class="admin-field">
+              <label>Destaque 2 (Card de Produto) *</label>
+              <select id="feat-select-2" required style="width:100%;padding:10px;background:#1e2020;border:1px solid #4c4546;color:#e3e2e2;border-radius:8px">
+                <option value="">Carregando produtos...</option>
+              </select>
+            </div>
+            <div class="admin-field">
+              <label>Destaque 3 (Card de Produto) *</label>
+              <select id="feat-select-3" required style="width:100%;padding:10px;background:#1e2020;border:1px solid #4c4546;color:#e3e2e2;border-radius:8px">
+                <option value="">Carregando produtos...</option>
+              </select>
+            </div>
+            <div class="admin-field">
+              <label>Destaque 4 (Card de Produto) *</label>
+              <select id="feat-select-4" required style="width:100%;padding:10px;background:#1e2020;border:1px solid #4c4546;color:#e3e2e2;border-radius:8px">
+                <option value="">Carregando produtos...</option>
+              </select>
+            </div>
+            <button type="submit" class="admin-btn-primary" style="margin-top:12px;width:100%">Salvar Configurações de Destaque</button>
+          </form>
         </div>
       </section>
 
@@ -1459,11 +1502,101 @@ window.adminNavTo = function(sectionId) {
   document.getElementById(sectionId).classList.add('active');
   if (sectionId === 'sec-products') adminRenderProducts();
   if (sectionId === 'sec-dashboard') adminUpdateStats();
+  if (sectionId === 'sec-featured-config') adminLoadFeaturedSettings();
   if (sectionId === 'sec-add' && !__editingId) resetAdminForm();
 };
 document.querySelectorAll('.admin-nav-item').forEach(item => {
   item.addEventListener('click', () => adminNavTo(item.dataset.target));
 });
+
+// -- Gerenciamento de Destaques (Featured) --
+async function adminLoadFeaturedSettings() {
+  const selects = [
+    document.getElementById('feat-select-1'),
+    document.getElementById('feat-select-2'),
+    document.getElementById('feat-select-3'),
+    document.getElementById('feat-select-4')
+  ];
+  
+  selects.forEach(select => {
+    if (select) select.innerHTML = '<option value="">Carregando produtos...</option>';
+  });
+
+  try {
+    // 1. Carrega todos os produtos ativos do banco
+    const snapshot = await window.db.collection('produtos').get();
+    const dbProds = [];
+    snapshot.forEach(doc => {
+      const data = doc.data();
+      if (data.available !== false) {
+        dbProds.push(data);
+      }
+    });
+    dbProds.sort((a, b) => a.title.localeCompare(b.title));
+
+    // Preenche as opções
+    selects.forEach(select => {
+      if (!select) return;
+      select.innerHTML = '<option value="" disabled selected>Selecione um produto...</option>';
+      dbProds.forEach(p => {
+        const option = document.createElement('option');
+        option.value = p.id;
+        option.textContent = `${p.title} (R$ ${p.price.toFixed(2)})`;
+        select.appendChild(option);
+      });
+    });
+
+    // 2. Carrega as configurações atuais do Firestore
+    const configDoc = await window.db.collection('config').doc('home').get();
+    if (configDoc.exists) {
+      const data = configDoc.data();
+      const featuredIds = data.featured_ids || [];
+      featuredIds.forEach((id, idx) => {
+        if (selects[idx]) {
+          selects[idx].value = id;
+        }
+      });
+    }
+  } catch (err) {
+    console.error('Erro ao carregar configurações de destaques:', err);
+    alert('Erro ao carregar configurações de destaques');
+  }
+}
+
+window.handleSaveFeatured = async function(e) {
+  e.preventDefault();
+  const submitBtn = e.target.querySelector('button[type="submit"]');
+  const origText = submitBtn.textContent;
+  submitBtn.disabled = true;
+  submitBtn.textContent = 'Salvando...';
+
+  const ids = [
+    parseInt(document.getElementById('feat-select-1').value),
+    parseInt(document.getElementById('feat-select-2').value),
+    parseInt(document.getElementById('feat-select-3').value),
+    parseInt(document.getElementById('feat-select-4').value)
+  ];
+
+  if (ids.some(isNaN)) {
+    alert('Por favor, selecione produtos válidos para todos os destaques.');
+    submitBtn.disabled = false;
+    submitBtn.textContent = origText;
+    return;
+  }
+
+  try {
+    await window.db.collection('config').doc('home').set({
+      featured_ids: ids
+    });
+    showAdminToast('Configurações de destaque salvas!');
+  } catch (err) {
+    console.error(err);
+    alert('Erro ao salvar destaques: ' + err.message);
+  } finally {
+    submitBtn.disabled = false;
+    submitBtn.textContent = origText;
+  }
+};
 
 // -- Stats --
 async function adminUpdateStats() {

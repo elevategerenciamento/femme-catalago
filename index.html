@@ -315,79 +315,26 @@
       </div>
       <a class="font-subheading text-subheading text-secondary hover:text-on-background transition-colors uppercase tracking-widest hidden md:block" href="produtos.html">Ver Todos</a>
     </div>
-    <div class="grid grid-cols-2 md:grid-cols-2 lg:grid-cols-4 gap-3 md:gap-gutter">
-
-      <!-- Card 1 -->
-      <div class="group relative rounded-none flex flex-col gap-1 md:gap-stack-sm">
-        <div class="relative aspect-[2/3] overflow-hidden bg-surface-container-low rounded-none">
-          <img class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105" src="images/prod_red_camisole.png" alt="Camisola Vermelha Femme"/>
-          <div class="absolute top-1 left-1 md:top-stack-sm md:left-stack-sm flex flex-col gap-1">
-            <span class="bg-secondary text-background font-label-sm text-[9px] md:text-label-sm px-2 py-0.5 md:px-3 md:py-1 uppercase tracking-wider rounded-none">Best Seller</span>
-          </div>
-          <div class="absolute inset-0 bg-black/40 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-300">
-            <button onclick="openQV(0)" class="border border-on-background text-on-background px-3 md:px-6 py-1.5 md:py-2 font-subheading text-[10px] md:text-subheading uppercase tracking-wider hover:bg-on-background hover:text-background transition-colors rounded-none">
-              Quick View
-            </button>
-          </div>
-        </div>
-        <div class="flex flex-col items-center text-center mt-2 md:mt-stack-md">
-          <h4 class="font-body-md text-[12px] md:text-body-lg text-on-background leading-tight">Camisola Vermelha Femme</h4>
-          <p class="text-[12px] md:text-body-md text-secondary mt-0.5">R$ 450,00</p>
+    
+    <!-- Dynamic Layout: Magazine Banner + Cards Grid -->
+    <div class="flex flex-col lg:flex-row gap-6 md:gap-gutter">
+      <!-- Magazine Banner Area (Destaque 1) -->
+      <div id="magazine-banner-container" class="w-full lg:w-[45%] flex-shrink-0">
+        <!-- Populated dynamically or fallback -->
+        <div class="animate-pulse bg-surface-container-low h-[450px] md:h-[600px] w-full"></div>
+      </div>
+      
+      <!-- Secondary Cards Area (Destaque 2, 3, 4) -->
+      <div class="w-full lg:flex-1">
+        <div id="secondary-featured-grid" class="grid grid-cols-2 md:grid-cols-3 gap-3 md:gap-gutter">
+          <!-- Populated dynamically -->
+          <div class="animate-pulse bg-surface-container-low aspect-[2/3] w-full"></div>
+          <div class="animate-pulse bg-surface-container-low aspect-[2/3] w-full"></div>
+          <div class="animate-pulse bg-surface-container-low aspect-[2/3] w-full"></div>
         </div>
       </div>
-
-      <!-- Card 2 -->
-      <div class="group relative rounded-none flex flex-col gap-1 md:gap-stack-sm">
-        <div class="relative aspect-[2/3] overflow-hidden bg-surface-container-low rounded-none">
-          <img class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105" src="images/prod_noir_elegance.png" alt="Conjunto Noir Elegance"/>
-          <div class="absolute inset-0 bg-black/40 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-300">
-            <button onclick="openQV(1)" class="border border-on-background text-on-background px-3 md:px-6 py-1.5 md:py-2 font-subheading text-[10px] md:text-subheading uppercase tracking-wider hover:bg-on-background hover:text-background transition-colors rounded-none">
-              Quick View
-            </button>
-          </div>
-        </div>
-        <div class="flex flex-col items-center text-center mt-2 md:mt-stack-md">
-          <h4 class="font-body-md text-[12px] md:text-body-lg text-on-background leading-tight">Conjunto Noir Elegance</h4>
-          <p class="text-[12px] md:text-body-md text-secondary mt-0.5">R$ 380,00</p>
-        </div>
-      </div>
-
-      <!-- Card 3 -->
-      <div class="group relative rounded-none flex flex-col gap-1 md:gap-stack-sm">
-        <div class="relative aspect-[2/3] overflow-hidden bg-surface-container-low rounded-none">
-          <img class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105" src="images/prod_champagne_corset.png" alt="Espartilho Champagne"/>
-          <div class="absolute top-1 left-1 md:top-stack-sm md:left-stack-sm flex flex-col gap-1">
-            <span class="bg-secondary text-background font-label-sm text-[9px] md:text-label-sm px-2 py-0.5 md:px-3 md:py-1 uppercase tracking-wider rounded-none">Edição Limitada</span>
-          </div>
-          <div class="absolute inset-0 bg-black/40 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-300">
-            <button onclick="openQV(2)" class="border border-on-background text-on-background px-3 md:px-6 py-1.5 md:py-2 font-subheading text-[10px] md:text-subheading uppercase tracking-wider hover:bg-on-background hover:text-background transition-colors rounded-none">
-              Quick View
-            </button>
-          </div>
-        </div>
-        <div class="flex flex-col items-center text-center mt-2 md:mt-stack-md">
-          <h4 class="font-body-md text-[12px] md:text-body-lg text-on-background leading-tight">Espartilho Champagne</h4>
-          <p class="text-[12px] md:text-body-md text-secondary mt-0.5">R$ 520,00</p>
-        </div>
-      </div>
-
-      <!-- Card 4 -->
-      <div class="group relative rounded-none flex flex-col gap-1 md:gap-stack-sm">
-        <div class="relative aspect-[2/3] overflow-hidden bg-surface-container-low rounded-none">
-          <img class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105" src="images/prod_rose_gold_bra.png" alt="Sutiã Rose Gold Detail"/>
-          <div class="absolute inset-0 bg-black/40 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-300">
-            <button onclick="openQV(3)" class="border border-on-background text-on-background px-3 md:px-6 py-1.5 md:py-2 font-subheading text-[10px] md:text-subheading uppercase tracking-wider hover:bg-on-background hover:text-background transition-colors rounded-none">
-              Quick View
-            </button>
-          </div>
-        </div>
-        <div class="flex flex-col items-center text-center mt-2 md:mt-stack-md">
-          <h4 class="font-body-md text-[12px] md:text-body-lg text-on-background leading-tight">Sutiã Rose Gold Detail</h4>
-          <p class="text-[12px] md:text-body-md text-secondary mt-0.5">R$ 290,00</p>
-        </div>
-      </div>
-
     </div>
+
     <div class="mt-6 md:mt-stack-lg text-center md:hidden">
       <a class="inline-block font-subheading text-[11px] md:text-subheading text-secondary border border-secondary px-6 md:px-8 py-2.5 md:py-3 hover:bg-secondary hover:text-background transition-colors uppercase tracking-widest rounded-none" href="produtos.html">Ver Todos</a>
     </div>
@@ -520,25 +467,46 @@
   </div>
 </div>
 
+<!-- Firebase Config and SDK -->
+<script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore-compat.js"></script>
+<script>
+  const firebaseConfig = {
+    apiKey: "AIzaSyCY9HNv3yJITeeVI_8u75gysvfbukPbJ2s",
+    authDomain: "femme-catalago.firebaseapp.com",
+    projectId: "femme-catalago",
+    storageBucket: "femme-catalago.firebasestorage.app",
+    messagingSenderId: "336075206197",
+    appId: "1:336075206197:web:5374e29d2f63f9b8324b7c",
+    measurementId: "G-SPLE5VN7ZF"
+  };
+  firebase.initializeApp(firebaseConfig);
+  window.db = firebase.firestore();
+</script>
+
 <script>
 // ── PRODUCTS ──────────────────────────────────────────
 const PRODUCTS = [
   {
+    id: 1,
     title: 'Camisola Vermelha Femme', price: 450, image: 'images/prod_red_camisole.png',
     badge: 'Best Seller', sizes: ['P','M','G','GG'],
     desc: 'Confeccionada em seda pura italiana e renda chantilly francesa. Caimento fluido impecável e alças delicadas reguláveis que valorizam a silhueta com extrema elegância.'
   },
   {
+    id: 2,
     title: 'Conjunto Noir Elegance', price: 380, image: 'images/prod_noir_elegance.png',
     badge: 'Novidade', sizes: ['P','M','G'],
     desc: 'Um clássico indispensável em renda onyx de alta costura. Sutiã estruturado e calcinha hot pant rendada. Conforto extraordinário aliado à sensualidade atemporal do preto profundo.'
   },
   {
+    id: 3,
     title: 'Espartilho Champagne', price: 520, image: 'images/prod_champagne_corset.png',
     badge: 'Edição Limitada', sizes: ['P','M','G','GG'],
     desc: 'Peça escultural estruturada com barbatanas flexíveis e amarração clássica. Cetim encorpado de brilho suave e detalhes em renda manual que desenham as curvas com precisão.'
   },
   {
+    id: 4,
     title: 'Sutiã Rose Gold Detail', price: 290, image: 'images/prod_rose_gold_bra.png',
     badge: 'Mais Desejado', sizes: ['P','M','G'],
     desc: 'Bordado exclusivo em fios metálicos sobre tule invisível. Cria uma ilusão sofisticada de joia sobre a pele, perfeito para momentos em que delicadeza e luxo andam lado a lado.'
@@ -549,6 +517,120 @@ const PRODUCTS = [
 let cart = JSON.parse(localStorage.getItem('femme_cart') || '[]');
 let qvSelectedSize = null;
 let qvProductIdx = null;
+
+// ── RENDER DYNAMIC FEATURED (1 MAGAZINE BANNER + 3 CARDS) ──
+async function loadDynamicFeatured() {
+  const bannerContainer = document.getElementById('magazine-banner-container');
+  const gridContainer = document.getElementById('secondary-featured-grid');
+  
+  try {
+    // 1. Obter os IDs salvos no Firestore
+    const configDoc = await window.db.collection('config').doc('home').get();
+    let featuredIds = [1, 2, 3, 4]; // Fallback default IDs
+    if (configDoc.exists) {
+      const data = configDoc.data();
+      if (data.featured_ids && data.featured_ids.length === 4) {
+        featuredIds = data.featured_ids;
+      }
+    }
+
+    // 2. Buscar os produtos do Firestore
+    const productsSnapshot = await window.db.collection('produtos').get();
+    const dbProducts = [];
+    productsSnapshot.forEach(doc => {
+      dbProducts.push(doc.data());
+    });
+
+    // Filtra e ordena para bater com a ordem de featuredIds
+    const featuredProducts = [];
+    featuredIds.forEach(id => {
+      const p = dbProducts.find(x => x.id === id);
+      if (p) {
+        // Mapeia o campo description para desc para manter compatibilidade
+        p.desc = p.description || p.desc;
+        featuredProducts.push(p);
+      }
+    });
+
+    // Se não encontrou do Firebase, usa os defaults locais
+    if (featuredProducts.length < 4) {
+      featuredProducts.length = 0;
+      featuredIds.forEach((id, index) => {
+        const fallbackProd = PRODUCTS[index];
+        if (fallbackProd) featuredProducts.push(fallbackProd);
+      });
+    }
+
+    // Atualiza o array global de PRODUCTS para indexar corretamente o Quick View
+    PRODUCTS.length = 0;
+    featuredProducts.forEach(p => PRODUCTS.push(p));
+
+    // 3. Renderizar o Destaque 1 (Banner Revista)
+    const mainProd = featuredProducts[0];
+    const mainBadgeHTML = mainProd.badge 
+      ? `<span class="bg-secondary text-background font-label-sm text-[9px] md:text-label-sm px-2.5 py-0.5 md:px-3.5 md:py-1 uppercase tracking-wider rounded-none mb-3 inline-block">${mainProd.badge}</span>`
+      : '';
+    
+    bannerContainer.innerHTML = `
+      <div class="magazine-banner group relative w-full h-[450px] md:h-[600px] overflow-hidden bg-surface-container-low border border-outline-variant/10">
+        <div class="absolute inset-0 bg-cover bg-center transition-transform duration-1000 group-hover:scale-105" style="background-image: url('${mainProd.image}')"></div>
+        <div class="absolute inset-0 bg-gradient-to-t from-black/80 via-black/35 to-transparent"></div>
+        
+        <!-- Magazine Styling Overlay -->
+        <div class="absolute inset-x-6 top-6 flex justify-between items-start pointer-events-none">
+          <span class="text-[9px] tracking-[0.2em] text-white/50 uppercase font-sans">Issue No. 12</span>
+          <span class="text-[9px] tracking-[0.2em] text-white/50 uppercase font-sans">Dezembro 2026</span>
+        </div>
+
+        <div class="absolute inset-x-0 bottom-0 p-6 md:p-8 flex flex-col items-center text-center">
+          ${mainBadgeHTML}
+          <h3 class="font-display text-[26px] md:text-[38px] text-white leading-tight uppercase tracking-wider font-light mb-2">${mainProd.title}</h3>
+          <p class="text-[12px] md:text-[14px] text-white/70 max-w-[85%] font-light line-clamp-2 mb-4 hidden sm:block">${mainProd.desc || ''}</p>
+          <div class="flex items-center gap-4">
+            <span class="text-secondary font-medium text-lg font-sans">R$ ${mainProd.price.toFixed(2).replace('.', ',')}</span>
+            <button onclick="openQV(0)" class="border border-white text-white px-5 py-2 font-subheading text-[10px] uppercase tracking-wider hover:bg-white hover:text-black transition-colors rounded-none">
+              Ver Detalhes
+            </button>
+          </div>
+        </div>
+      </div>
+    `;
+
+    // 4. Renderizar os Destaques 2, 3 e 4 (Cards normais)
+    gridContainer.innerHTML = '';
+    for (let i = 1; i < 4; i++) {
+      const p = featuredProducts[i];
+      if (!p) continue;
+      
+      const badgeHTML = p.badge 
+        ? `<div class="absolute top-1 left-1 md:top-stack-sm md:left-stack-sm flex flex-col gap-1 z-10">
+            <span class="bg-secondary text-background font-label-sm text-[9px] md:text-label-sm px-2 py-0.5 md:px-3 md:py-1 uppercase tracking-wider rounded-none">${p.badge}</span>
+           </div>`
+        : '';
+
+      const card = document.createElement('div');
+      card.className = 'group relative rounded-none flex flex-col gap-1 md:gap-stack-sm';
+      card.innerHTML = `
+        <div class="relative aspect-[2/3] overflow-hidden bg-surface-container-low rounded-none">
+          ${badgeHTML}
+          <img class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105" src="${p.image}" alt="${p.title}"/>
+          <div class="absolute inset-0 bg-black/40 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+            <button onclick="openQV(${i})" class="border border-on-background text-on-background px-3 md:px-6 py-1.5 md:py-2 font-subheading text-[10px] md:text-subheading uppercase tracking-wider hover:bg-on-background hover:text-background transition-colors rounded-none">
+              Quick View
+            </button>
+          </div>
+        </div>
+        <div class="flex flex-col items-center text-center mt-2 md:mt-stack-md">
+          <h4 class="font-body-md text-[12px] md:text-body-lg text-on-background leading-tight">${p.title}</h4>
+          <p class="text-[12px] md:text-body-md text-secondary mt-0.5">R$ ${p.price.toFixed(2).replace('.', ',')}</p>
+        </div>
+      `;
+      gridContainer.appendChild(card);
+    }
+  } catch (err) {
+    console.error('Erro ao renderizar destaques dinâmicos:', err);
+  }
+}
 
 // ── HEADER SCROLL ──────────────────────────────────────
 window.addEventListener('scroll', () => {
@@ -754,6 +836,7 @@ document.getElementById('qv-add-btn').addEventListener('click', function() {
 });
 
 // ── INIT ──────────────────────────────────────────────
+loadDynamicFeatured();
 renderCart();
 </script>
 </body>
