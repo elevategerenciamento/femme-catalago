@@ -202,15 +202,15 @@
 <body class="bg-background text-on-background font-body-md text-body-md antialiased selection:bg-secondary selection:text-background overflow-x-hidden">
 
 <!-- ══════════════════ HEADER ══════════════════ -->
-<header id="site-header" class="bg-background/0 backdrop-blur-md fixed top-0 left-0 w-full z-50 border-b border-transparent flex justify-between items-center px-margin-edge py-stack-md transition-all duration-500">
+<header id="site-header" class="bg-background/0 backdrop-blur-md fixed top-0 left-0 w-full z-[100] border-b border-transparent flex justify-between items-center px-margin-edge py-stack-md transition-all duration-500">
   <!-- Nav Esquerda (desktop) -->
   <nav class="hidden md:flex gap-gutter items-center">
     <a class="font-subheading text-subheading uppercase tracking-widest text-on-background hover:text-secondary transition-colors duration-300" href="/">Início</a>
     <a class="font-subheading text-subheading uppercase tracking-widest text-secondary transition-colors duration-300" href="/produtos">Produtos</a>
     <a class="font-subheading text-subheading uppercase tracking-widest text-on-background hover:text-secondary transition-colors duration-300" href="/#story">Sobre a Femme</a>
   </nav>
-  <!-- Menu hambúrguer (mobile) -->
-  <button id="menu-btn" class="md:hidden text-on-background hover:opacity-80 transition-opacity">
+  <!-- Menu hambúrguer (somente no mobile) -->
+  <button id="menu-btn" class="md:hidden text-on-background hover:opacity-80 transition-opacity z-[110]">
     <span class="material-symbols-outlined">menu</span>
   </button>
   <!-- Logo Centralizada -->
@@ -262,7 +262,7 @@
     </div>
 
     <!-- Products Grid -->
-    <div id="products-grid" class="grid grid-cols-2 lg:grid-cols-3 gap-y-8 md:gap-y-16 gap-x-3 md:gap-x-gutter">
+    <div id="products-grid" class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-y-8 md:gap-y-12 gap-x-3 md:gap-x-6">
       <!-- Carregado via Javascript -->
     </div>
   </section>
@@ -805,11 +805,11 @@
         </div>
         <div style="background:rgba(30,32,32,0.4);border:1px solid rgba(255,255,255,0.05);border-radius:14px;padding:24px" class="space-y-6">
           <p style="font-size:12px;color:#988e90;font-family:Montserrat,sans-serif;margin-bottom:20px">
-            Selecione quais produtos serão exibidos na seção de Destaques na Home. O <strong>Destaque 1</strong> será exibido como o banner principal grande (estilo capa de revista, sem textos e valores por cima), enquanto os destaques 2, 3, 4 e 5 serão exibidos como cards tradicionais ao lado em um grid de 2 colunas e 2 linhas.
+            Selecione quais produtos serão exibidos na seção de Destaques na Home. O banner vertical é fixo com o Conjunto Noir Elegance, enquanto os destaques de 1 a 6 serão exibidos como cards tradicionais no grid ao lado.
           </p>
           <form id="featured-config-form" onsubmit="handleSaveFeatured(event)" style="display:flex;flex-direction:column;gap:18px">
             <div class="admin-field">
-              <label>Destaque 1 (Banner Capa de Revista) *</label>
+              <label>Destaque 1 (Card de Produto) *</label>
               <select id="feat-select-1" required style="width:100%;padding:10px;background:#1e2020;border:1px solid #4c4546;color:#e3e2e2;border-radius:8px">
                 <option value="">Carregando produtos...</option>
               </select>
@@ -841,12 +841,6 @@
             <div class="admin-field">
               <label>Destaque 6 (Card de Produto) *</label>
               <select id="feat-select-6" required style="width:100%;padding:10px;background:#1e2020;border:1px solid #4c4546;color:#e3e2e2;border-radius:8px">
-                <option value="">Carregando produtos...</option>
-              </select>
-            </div>
-            <div class="admin-field">
-              <label>Destaque 7 (Card de Produto) *</label>
-              <select id="feat-select-7" required style="width:100%;padding:10px;background:#1e2020;border:1px solid #4c4546;color:#e3e2e2;border-radius:8px">
                 <option value="">Carregando produtos...</option>
               </select>
             </div>
@@ -910,13 +904,44 @@
               <textarea id="prod-desc" placeholder="Descreva o produto com detalhes sobre material, estilo e diferenciais..." required></textarea>
             </div>
             <div class="admin-field" style="grid-column:1/-1">
-              <label>Imagem do Produto</label>
-              <div class="img-upload-zone" onclick="document.getElementById('prod-image').click()">
-                <input type="file" id="prod-image" accept="image/*" />
-                <span class="material-symbols-outlined" style="font-size:32px;color:#4c4546;display:block;margin-bottom:8px">add_photo_alternate</span>
-                <p style="color:#4c4546;font-size:12px;font-family:Montserrat,sans-serif">Clique para selecionar imagem</p>
-                <p style="color:#333535;font-size:11px;font-family:Montserrat,sans-serif;margin-top:4px">JPG, PNG, WEBP</p>
-                <img id="admin-img-preview" src="" alt="Preview" />
+              <label>Imagens do Produto (Até 4 fotos - A primeira será a principal/capa)</label>
+              <div style="display:grid;grid-template-columns:repeat(auto-fit, minmax(120px, 1fr));gap:12px;margin-top:8px">
+                <!-- Imagem 1 (Principal) -->
+                <div class="img-upload-zone-wrapper">
+                  <div class="img-upload-zone mini-upload-zone" onclick="document.getElementById('prod-image-1').click()" style="height:120px;padding:12px;border:1.5px dashed rgba(255,255,255,0.1);border-radius:10px;text-align:center;cursor:pointer;position:relative;display:flex;flex-direction:column;align-items:center;justify-content:center;transition:all 0.3s">
+                    <input type="file" id="prod-image-1" accept="image/*" style="display:none" />
+                    <span class="material-symbols-outlined" style="font-size:24px;color:#4c4546;margin-bottom:4px">add_photo_alternate</span>
+                    <span style="font-size:10px;color:#4c4546;font-family:Montserrat,sans-serif">Principal *</span>
+                    <img id="admin-img-preview-1" class="admin-img-preview-mini" src="" alt="Preview 1" style="display:none;position:absolute;inset:0;width:100%;height:100%;object-fit:cover;border-radius:9px" />
+                  </div>
+                </div>
+                <!-- Imagem 2 -->
+                <div class="img-upload-zone-wrapper">
+                  <div class="img-upload-zone mini-upload-zone" onclick="document.getElementById('prod-image-2').click()" style="height:120px;padding:12px;border:1.5px dashed rgba(255,255,255,0.1);border-radius:10px;text-align:center;cursor:pointer;position:relative;display:flex;flex-direction:column;align-items:center;justify-content:center;transition:all 0.3s">
+                    <input type="file" id="prod-image-2" accept="image/*" style="display:none" />
+                    <span class="material-symbols-outlined" style="font-size:24px;color:#4c4546;margin-bottom:4px">add_photo_alternate</span>
+                    <span style="font-size:10px;color:#4c4546;font-family:Montserrat,sans-serif">Imagem 2</span>
+                    <img id="admin-img-preview-2" class="admin-img-preview-mini" src="" alt="Preview 2" style="display:none;position:absolute;inset:0;width:100%;height:100%;object-fit:cover;border-radius:9px" />
+                  </div>
+                </div>
+                <!-- Imagem 3 -->
+                <div class="img-upload-zone-wrapper">
+                  <div class="img-upload-zone mini-upload-zone" onclick="document.getElementById('prod-image-3').click()" style="height:120px;padding:12px;border:1.5px dashed rgba(255,255,255,0.1);border-radius:10px;text-align:center;cursor:pointer;position:relative;display:flex;flex-direction:column;align-items:center;justify-content:center;transition:all 0.3s">
+                    <input type="file" id="prod-image-3" accept="image/*" style="display:none" />
+                    <span class="material-symbols-outlined" style="font-size:24px;color:#4c4546;margin-bottom:4px">add_photo_alternate</span>
+                    <span style="font-size:10px;color:#4c4546;font-family:Montserrat,sans-serif">Imagem 3</span>
+                    <img id="admin-img-preview-3" class="admin-img-preview-mini" src="" alt="Preview 3" style="display:none;position:absolute;inset:0;width:100%;height:100%;object-fit:cover;border-radius:9px" />
+                  </div>
+                </div>
+                <!-- Imagem 4 -->
+                <div class="img-upload-zone-wrapper">
+                  <div class="img-upload-zone mini-upload-zone" onclick="document.getElementById('prod-image-4').click()" style="height:120px;padding:12px;border:1.5px dashed rgba(255,255,255,0.1);border-radius:10px;text-align:center;cursor:pointer;position:relative;display:flex;flex-direction:column;align-items:center;justify-content:center;transition:all 0.3s">
+                    <input type="file" id="prod-image-4" accept="image/*" style="display:none" />
+                    <span class="material-symbols-outlined" style="font-size:24px;color:#4c4546;margin-bottom:4px">add_photo_alternate</span>
+                    <span style="font-size:10px;color:#4c4546;font-family:Montserrat,sans-serif">Imagem 4</span>
+                    <img id="admin-img-preview-4" class="admin-img-preview-mini" src="" alt="Preview 4" style="display:none;position:absolute;inset:0;width:100%;height:100%;object-fit:cover;border-radius:9px" />
+                  </div>
+                </div>
               </div>
             </div>
           </div>
@@ -974,8 +999,9 @@
     <button onclick="closeQV()" class="absolute top-4 right-4 text-on-surface-variant hover:text-secondary transition-colors z-10">
       <span class="material-symbols-outlined">close</span>
     </button>
-    <div id="qv-img-wrap" class="relative aspect-[3/4] md:aspect-auto">
-      <img id="qv-img" src="" alt="" class="w-full h-full object-cover"/>
+    <div id="qv-img-wrap" class="relative flex flex-col gap-2.5">
+      <img id="qv-img" src="" alt="" class="w-full aspect-[3/4] object-cover"/>
+      <div id="qv-thumbnails" class="flex gap-2 justify-center px-4 pb-2 overflow-x-auto" style="display: none;"></div>
     </div>
     <div class="p-8 md:p-10 flex flex-col justify-center gap-4">
       <span id="qv-badge" class="font-label-sm text-label-sm text-secondary"></span>
@@ -1375,6 +1401,32 @@ window.openProductQV = function(productId) {
   document.getElementById('qv-price').textContent = 'R$ ' + p.price.toFixed(2).replace('.',',');
   document.getElementById('qv-desc').textContent = p.description;
   
+  // Galeria de imagens (Miniaturas)
+  const thumbsContainer = document.getElementById('qv-thumbnails');
+  if (thumbsContainer) {
+    thumbsContainer.innerHTML = '';
+    const imagesList = p.images && p.images.length > 0 ? p.images : (p.image ? [p.image] : []);
+    if (imagesList.length > 1) {
+      thumbsContainer.style.display = 'flex';
+      imagesList.forEach((imgUrl, i) => {
+        const imgThumb = document.createElement('img');
+        imgThumb.src = imgUrl;
+        imgThumb.className = 'w-14 h-20 object-cover cursor-pointer border border-transparent hover:border-secondary transition-all';
+        if (imgUrl === p.image) {
+          imgThumb.classList.add('border-secondary');
+        }
+        imgThumb.addEventListener('click', () => {
+          document.getElementById('qv-img').src = imgUrl;
+          thumbsContainer.querySelectorAll('img').forEach(el => el.classList.remove('border-secondary'));
+          imgThumb.classList.add('border-secondary');
+        });
+        thumbsContainer.appendChild(imgThumb);
+      });
+    } else {
+      thumbsContainer.style.display = 'none';
+    }
+  }
+  
   const sizesEl = document.getElementById('qv-sizes');
   sizesEl.innerHTML = '';
   p.sizes.forEach(s => {
@@ -1535,8 +1587,7 @@ async function adminLoadFeaturedSettings() {
     document.getElementById('feat-select-3'),
     document.getElementById('feat-select-4'),
     document.getElementById('feat-select-5'),
-    document.getElementById('feat-select-6'),
-    document.getElementById('feat-select-7')
+    document.getElementById('feat-select-6')
   ];
   
   selects.forEach(select => {
@@ -1571,7 +1622,11 @@ async function adminLoadFeaturedSettings() {
     const configDoc = await window.db.collection('config').doc('home').get();
     if (configDoc.exists) {
       const data = configDoc.data();
-      const featuredIds = data.featured_ids || [];
+      let featuredIds = data.featured_ids || [];
+      // Se houver 7 itens (compatibilidade com versão antiga), pulamos o primeiro
+      if (featuredIds.length === 7) {
+        featuredIds = featuredIds.slice(1);
+      }
       featuredIds.forEach((id, idx) => {
         if (selects[idx]) {
           selects[idx].value = id;
@@ -1597,8 +1652,7 @@ window.handleSaveFeatured = async function(e) {
     parseInt(document.getElementById('feat-select-3').value),
     parseInt(document.getElementById('feat-select-4').value),
     parseInt(document.getElementById('feat-select-5').value),
-    parseInt(document.getElementById('feat-select-6').value),
-    parseInt(document.getElementById('feat-select-7').value)
+    parseInt(document.getElementById('feat-select-6').value)
   ];
 
   if (ids.some(isNaN)) {
@@ -1741,10 +1795,25 @@ window.adminEditProduct = async function(id) {
     document.getElementById('prod-sizes').value = (p.sizes||[]).join(', ');
     syncSizesUI();
     document.getElementById('prod-badge').value = p.badge || '';
-    if (p.image) {
-      const prev = document.getElementById('admin-img-preview');
+    
+    // Limpa previews primeiro
+    [1, 2, 3, 4].forEach(num => {
+      const prev = document.getElementById(`admin-img-preview-${num}`);
+      prev.style.display = 'none'; prev.src = '';
+    });
+    
+    if (p.images && p.images.length > 0) {
+      p.images.forEach((imgUrl, idx) => {
+        if (imgUrl && idx < 4) {
+          const prev = document.getElementById(`admin-img-preview-${idx + 1}`);
+          prev.src = imgUrl; prev.style.display = 'block';
+        }
+      });
+    } else if (p.image) {
+      const prev = document.getElementById('admin-img-preview-1');
       prev.src = p.image; prev.style.display = 'block';
     }
+    
     document.getElementById('form-section-title').textContent = 'Editar Produto';
     document.getElementById('form-submit-btn').textContent = 'Salvar Alterações';
     adminNavTo('sec-add');
@@ -1756,8 +1825,11 @@ window.adminEditProduct = async function(id) {
 window.resetAdminForm = function() {
   __editingId = null;
   document.getElementById('product-form').reset();
-  document.getElementById('admin-img-preview').style.display = 'none';
-  document.getElementById('admin-img-preview').src = '';
+  [1, 2, 3, 4].forEach(num => {
+    const prev = document.getElementById(`admin-img-preview-${num}`);
+    prev.style.display = 'none';
+    prev.src = '';
+  });
   document.getElementById('form-section-title').textContent = 'Novo Produto';
   document.getElementById('form-submit-btn').textContent = 'Salvar Produto';
   syncSizesUI();
@@ -1824,7 +1896,13 @@ window.handleAdminFormSubmit = async function(e) {
   const category = document.getElementById('prod-category').value.trim();
   const sizes = document.getElementById('prod-sizes').value.split(',').map(s=>s.trim()).filter(Boolean);
   const badge = document.getElementById('prod-badge').value.trim();
-  const file = document.getElementById('prod-image').files[0];
+  
+  const files = [
+    document.getElementById('prod-image-1').files[0],
+    document.getElementById('prod-image-2').files[0],
+    document.getElementById('prod-image-3').files[0],
+    document.getElementById('prod-image-4').files[0]
+  ];
 
   if (sizes.length === 0) {
     alert('Por favor, selecione pelo menos um tamanho.');
@@ -1834,16 +1912,29 @@ window.handleAdminFormSubmit = async function(e) {
   }
 
   try {
-    let imageUrl = '';
-    if (file) {
-      imageUrl = await uploadImageToCloudinary(file);
+    let existingImages = [];
+    let existingAvail = true;
+    if (__editingId) {
+      const doc = await window.db.collection('produtos').doc(String(__editingId)).get();
+      if (doc.exists) {
+        const d = doc.data();
+        existingImages = d.images || (d.image ? [d.image] : []);
+        existingAvail = d.available !== false;
+      }
     }
 
+    const uploadPromises = files.map(async (file, idx) => {
+      if (file) {
+        return await uploadImageToCloudinary(file);
+      }
+      return existingImages[idx] || '';
+    });
+
+    const uploadedUrls = await Promise.all(uploadPromises);
+    const images = uploadedUrls.filter(Boolean);
+    const mainImageUrl = images[0] || '';
+
     if (__editingId) {
-      const docRef = window.db.collection('produtos').doc(String(__editingId));
-      const doc = await docRef.get();
-      const existingData = doc.exists ? doc.data() : {};
-      
       const updatedProduct = {
         id: __editingId,
         title,
@@ -1852,10 +1943,11 @@ window.handleAdminFormSubmit = async function(e) {
         category,
         sizes,
         badge,
-        image: imageUrl || existingData.image || '',
-        available: existingData.available !== false
+        image: mainImageUrl,
+        images: images,
+        available: existingAvail
       };
-      await docRef.set(updatedProduct);
+      await window.db.collection('produtos').doc(String(__editingId)).set(updatedProduct);
       showAdminToast('Produto atualizado!');
     } else {
       const snapshot = await window.db.collection('produtos').get();
@@ -1867,7 +1959,8 @@ window.handleAdminFormSubmit = async function(e) {
         id: newId,
         title,
         price,
-        image: imageUrl || '',
+        image: mainImageUrl,
+        images: images,
         description: desc,
         badge,
         category,
@@ -1892,13 +1985,15 @@ window.handleAdminFormSubmit = async function(e) {
 };
 
 // Image preview
-document.getElementById('prod-image').addEventListener('change', function() {
-  const file = this.files[0];
-  const prev = document.getElementById('admin-img-preview');
-  if (!file) { prev.style.display='none'; return; }
-  const r = new FileReader();
-  r.onload = () => { prev.src = r.result; prev.style.display = 'block'; };
-  r.readAsDataURL(file);
+[1, 2, 3, 4].forEach(num => {
+  document.getElementById(`prod-image-${num}`).addEventListener('change', function() {
+    const file = this.files[0];
+    const prev = document.getElementById(`admin-img-preview-${num}`);
+    if (!file) { prev.style.display='none'; return; }
+    const r = new FileReader();
+    r.onload = () => { prev.src = r.result; prev.style.display = 'block'; };
+    r.readAsDataURL(file);
+  });
 });
 
 // Toast notification
