@@ -396,9 +396,9 @@
     <!-- Dynamic Layout: Magazine Banner + Cards Grid (Professional Alignment) -->
     <div class="flex flex-col lg:flex-row gap-6 md:gap-8 lg:items-stretch items-start max-w-7xl mx-auto w-full">
       <!-- Magazine Banner Area (Destaque 1) -->
-      <div id="magazine-banner-container" class="w-[calc(50%-8px)] max-w-[232px] mx-auto lg:max-w-none lg:mx-0 lg:w-[38%] flex-shrink-0 flex flex-col" style="overflow:visible">
+      <div id="magazine-banner-container" class="w-[calc(50%-8px)] max-w-[232px] mx-auto lg:max-w-none lg:mx-0 aspect-[2/3] lg:w-auto flex-shrink-0 flex flex-col" style="overflow:visible">
         <!-- Populated dynamically or fallback -->
-        <div class="animate-pulse bg-surface-container-low w-full aspect-[2/3] lg:aspect-auto lg:flex-1 lg:min-h-[510px]"></div>
+        <div class="animate-pulse bg-surface-container-low w-full h-full lg:flex-1 lg:min-h-[510px] aspect-[2/3]"></div>
       </div>
       
       <!-- Secondary Cards Area (Destaque 2 a 7 - Grid of 6 Small Cards) -->
@@ -660,7 +660,7 @@ async function loadDynamicFeatured() {
           <span></span>
           <span></span>
         </div>
-        <div class="magazine-banner relative w-full aspect-[2/3] lg:aspect-auto lg:flex-1 overflow-hidden bg-surface-container-low border border-outline-variant/10 cursor-pointer" onclick="openFixedQV()">
+        <div class="magazine-banner relative w-full h-full aspect-[2/3] overflow-hidden bg-surface-container-low border border-outline-variant/10 cursor-pointer" onclick="openFixedQV()">
           <div class="absolute inset-0 bg-cover bg-center" style="background-image: url('images/femme_1000x1500.png')"></div>
         </div>
       </div>
