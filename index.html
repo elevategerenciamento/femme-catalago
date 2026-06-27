@@ -529,7 +529,7 @@
       <span class="material-symbols-outlined text-[20px]">close</span>
     </button>
     <div id="qv-img-wrap" class="relative flex flex-col gap-2.5">
-      <img id="qv-img" src="" alt="" class="w-full aspect-[3/4] object-cover"/>
+      <img id="qv-img" src="" alt="" class="w-full aspect-[3/4] object-contain bg-[#0c0d0e]"/>
       <div id="qv-thumbnails" class="flex gap-2 justify-center px-4 pb-2 overflow-x-auto" style="display: none;"></div>
     </div>
     <div class="p-8 md:p-10 flex flex-col justify-center gap-4">
@@ -542,7 +542,7 @@
         <div id="qv-sizes" class="flex gap-2 mb-4"></div>
       </div>
       <button id="qv-add-btn" class="border border-secondary text-on-background font-subheading text-subheading uppercase tracking-[0.2em] py-4 hover:bg-secondary hover:text-background transition-all duration-500 rounded-none">
-        Adicionar ao Carrinho
+        Adicionar à Sacola
       </button>
     </div>
   </div>
@@ -693,7 +693,7 @@ async function loadDynamicFeatured() {
           <img class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105" src="${p.image}" alt="${p.title}"/>
           <div class="absolute inset-0 bg-black/40 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-300">
             <button onclick="openQV(${i})" class="border border-on-background text-on-background px-3 md:px-6 py-1.5 md:py-2 font-subheading text-[10px] md:text-subheading uppercase tracking-wider hover:bg-on-background hover:text-background transition-colors rounded-none">
-              Espiar
+              Ver Produto
             </button>
           </div>
         </div>
@@ -907,7 +907,7 @@ document.getElementById('search-input').addEventListener('input', function() {
       <div class="aspect-[3/4] overflow-hidden bg-surface-container-low relative">
         <img src="${p.image}" alt="${p.title}" class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105">
         <div class="absolute inset-0 bg-black/40 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-300">
-          <button class="border border-on-background text-on-background px-4 py-2 font-subheading text-[11px] uppercase tracking-wider hover:bg-on-background hover:text-background transition-colors rounded-none">Espiar</button>
+          <button class="border border-on-background text-on-background px-4 py-2 font-subheading text-[11px] uppercase tracking-wider hover:bg-on-background hover:text-background transition-colors rounded-none">Ver Produto</button>
         </div>
       </div>
       <p class="text-on-background text-sm text-center">${p.title}</p>

@@ -1019,7 +1019,7 @@
       <span class="material-symbols-outlined text-[20px]">close</span>
     </button>
     <div id="qv-img-wrap" class="relative flex flex-col gap-2.5">
-      <img id="qv-img" src="" alt="" class="w-full aspect-[3/4] object-cover"/>
+      <img id="qv-img" src="" alt="" class="w-full aspect-[3/4] object-contain bg-[#0c0d0e]"/>
       <div id="qv-thumbnails" class="flex gap-2 justify-center px-4 pb-2 overflow-x-auto" style="display: none;"></div>
     </div>
     <div class="p-8 md:p-10 flex flex-col justify-center gap-4">
@@ -1032,7 +1032,7 @@
         <div id="qv-sizes" class="flex gap-2 mb-4"></div>
       </div>
       <button id="qv-add-btn" class="border border-secondary text-on-background font-subheading text-subheading uppercase tracking-[0.2em] py-4 hover:bg-secondary hover:text-background transition-all duration-500 rounded-none">
-        Adicionar ao Carrinho
+        Adicionar à Sacola
       </button>
     </div>
   </div>
@@ -1205,7 +1205,7 @@ function renderProducts(category = 'all') {
         <img class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105 zoom-target" src="${p.image}" alt="${p.title}"/>
         <div class="absolute inset-0 bg-black/40 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-300">
           <button onclick="openProductQV(${p.id})" class="border border-on-background text-on-background px-3 md:px-6 py-1.5 md:py-2 font-subheading text-[10px] md:text-subheading uppercase tracking-wider hover:bg-on-background hover:text-background transition-colors rounded-none">
-            Espiar
+            Ver Produto
           </button>
         </div>
       </div>
@@ -1223,14 +1223,14 @@ function renderProducts(category = 'all') {
           </div>
         </div>
 
-        <div class="flex flex-col gap-1.5 md:gap-2 mt-auto">
-          <button onclick="addCardToCart(${p.id})" class="w-full bg-secondary text-background border border-secondary font-subheading text-[9px] md:text-[12px] uppercase tracking-[0.15em] md:tracking-[0.2em] py-2.5 md:py-3.5 hover:bg-transparent hover:text-on-background transition-all duration-500 rounded-none flex items-center justify-center gap-1 md:gap-2">
-            <span class="material-symbols-outlined text-[14px] md:text-[18px]">shopping_bag</span>
-            Adicionar ao Carrinho
+        <div class="flex gap-1.5 md:gap-2 mt-auto">
+          <button onclick="addCardToCart(${p.id})" class="flex-1 bg-secondary text-background border border-secondary font-subheading text-[9px] md:text-[11px] uppercase tracking-wider py-2.5 md:py-3.5 hover:bg-transparent hover:text-on-background transition-all duration-500 rounded-none flex items-center justify-center gap-1">
+            <span class="material-symbols-outlined text-[14px] md:text-[16px]">shopping_bag</span>
+            <span class="hidden sm:inline">Adicionar à </span>Sacola
           </button>
           
-          <button onclick="sendInterest(${p.id})" class="w-full border border-secondary text-on-background font-subheading text-[9px] md:text-[12px] uppercase tracking-[0.15em] md:tracking-[0.2em] py-2.5 md:py-3.5 hover:bg-secondary hover:text-background transition-all duration-500 rounded-none flex items-center justify-center gap-1 md:gap-2">
-            <span class="material-symbols-outlined text-[14px] md:text-[18px]">chat</span>
+          <button onclick="sendInterest(${p.id})" class="flex-1 border border-secondary text-on-background font-subheading text-[9px] md:text-[11px] uppercase tracking-wider py-2.5 md:py-3.5 hover:bg-secondary hover:text-background transition-all duration-500 rounded-none flex items-center justify-center gap-1">
+            <span class="material-symbols-outlined text-[14px] md:text-[16px]">chat</span>
             <span class="hidden sm:inline">Tenho </span>Interesse
           </button>
         </div>
