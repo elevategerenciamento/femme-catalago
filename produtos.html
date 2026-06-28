@@ -1229,15 +1229,15 @@ function renderProducts(category = 'all') {
           </div>
         </div>
 
-        <div class="flex gap-1.5 md:gap-2 mt-auto">
-          <button onclick="addCardToCart(${p.id})" class="flex-1 bg-secondary text-background border border-secondary font-subheading text-[9px] md:text-[11px] uppercase tracking-wider py-2.5 md:py-3.5 hover:bg-transparent hover:text-on-background transition-all duration-500 rounded-none flex items-center justify-center gap-1">
-            <span class="material-symbols-outlined text-[14px] md:text-[16px]">shopping_bag</span>
-            <span class="hidden sm:inline">Adicionar à </span>Sacola
+        <div class="flex flex-col gap-1.5 mt-auto">
+          <button onclick="addCardToCart(${p.id})" class="w-full bg-secondary text-background border border-secondary font-subheading text-[10px] md:text-[11px] uppercase tracking-wider py-2.5 hover:bg-transparent hover:text-on-background transition-all duration-300 rounded-none flex items-center justify-center gap-1.5">
+            <span class="material-symbols-outlined text-[15px] md:text-[17px]">shopping_bag</span>
+            <span>Adicionar à Sacola</span>
           </button>
           
-          <button onclick="sendInterest(${p.id})" class="flex-1 border border-secondary text-on-background font-subheading text-[9px] md:text-[11px] uppercase tracking-wider py-2.5 md:py-3.5 hover:bg-secondary hover:text-background transition-all duration-500 rounded-none flex items-center justify-center gap-1">
-            <span class="material-symbols-outlined text-[14px] md:text-[16px]">chat</span>
-            <span class="hidden sm:inline">Tenho </span>Interesse
+          <button onclick="sendInterest(${p.id})" class="w-full border border-secondary/50 text-secondary font-subheading text-[10px] md:text-[11px] uppercase tracking-wider py-2.5 hover:bg-secondary/15 hover:text-secondary hover:border-secondary transition-all duration-300 rounded-none flex items-center justify-center gap-1.5">
+            <span class="material-symbols-outlined text-[15px] md:text-[17px]">chat</span>
+            <span>Tenho Interesse</span>
           </button>
         </div>
       </div>
