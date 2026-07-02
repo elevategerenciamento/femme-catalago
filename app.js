@@ -154,7 +154,7 @@ function initCart() {
       
       message += `\n*Valor Total:* R$ ${total.toFixed(2)}\n\nComo posso prosseguir com o pagamento e entrega?`;
       
-      const whatsappUrl = `https://wa.me/5538999908770?text=${encodeURIComponent(message)}`;
+      const whatsappUrl = `https://wa.me/5538998228293?text=${encodeURIComponent(message)}`;
       window.open(whatsappUrl, '_blank');
     });
   }
